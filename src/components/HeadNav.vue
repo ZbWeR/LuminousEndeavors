@@ -1,7 +1,6 @@
 <template>
-  <!-- TODO:按钮样式调整 -->
   <div
-    class="box-border fixed top-0 z-10 w-full h-16 text-white shadow-[0_2px_5px_rgba(255,255,255,.3)] bg-gradient-to-r from-[#257afa] to-[#2a303a]"
+    class="opacity-75 box-border fixed top-0 z-10 w-full h-16 text-white shadow-[0_2px_5px_rgba(255,255,255,.3)] bg-gradient-to-r from-[#257afa] to-[#2a303a]"
   >
     <div class="flex justify-between w-10/12 h-full mx-auto">
       <div class="flex items-center h-full">

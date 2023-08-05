@@ -1,7 +1,17 @@
 <template>
-  <div class="w-full h-screen overflow-x-hidden overflow-y-auto select-none">
+  <!-- TODO:整体样式修改,白底 -->
+  <div v-show="isScrollDown"><HeadNav></HeadNav></div>
+
+  <div
+    class="w-full h-screen overflow-x-hidden overflow-y-auto select-none"
+    ref="fullPage"
+    @scroll="controlHeadNav"
+  >
     <!-- 首屏内容: 动态背景 / 标题 / slogan -->
-    <div class="relative flex items-center justify-center w-full h-full">
+    <div
+      class="relative flex items-center justify-center w-full h-full"
+      @wheel="handleScroll"
+    >
       <!-- 动态背景 -->
       <video
         src="../assets/bg.mp4"
@@ -57,7 +67,7 @@
       </div>
     </div>
     <!-- 主体内容 -->
-    <div class="w-full pt-20 bg-slate-800">
+    <div class="w-full pt-20 bg-slate-800" ref="mainContent">
       <div class="container mx-auto">
         <!-- 活动介绍 -->
         <div
@@ -138,6 +148,9 @@
 <script setup>
 import FlipCards from "@/components/FlipCards.vue";
 import CopyRights from "@/components/CopyRights.vue";
+import HeadNav from "@/components/HeadNav.vue";
+import { ref } from "vue";
+// import { debounce } from "@/utils/debounce";
 
 const missionsText = [
   "从开设的多个项目方向中选择感兴趣的方向，了解学科关键知识与行业前沿实践；",
@@ -182,10 +195,30 @@ const options = [
     abstract: "...",
   },
 ];
-// let activeIndex = 3;
-// function handleScroll(e) {
-//   console.log(e);
-// }
+
+const fullPage = ref(null);
+const mainContent = ref(null);
+
+// TODO:防抖处理
+function handleScroll(e) {
+  const isDown = e?.deltaY > 0 ? true : false;
+  const targetHeight = mainContent.value.offsetTop;
+  if (isDown) {
+    fullPage.value.scrollTo({
+      top: targetHeight,
+      behavior: "smooth",
+    });
+  }
+}
+
+let oldScroll = 0;
+const isScrollDown = ref(false);
+
+function controlHeadNav(e) {
+  let scrollTop = e.target.scrollTop;
+  isScrollDown.value = scrollTop > oldScroll;
+  oldScroll = scrollTop;
+}
 </script>
 
 <style lang="less" scoped>
