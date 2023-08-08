@@ -1,6 +1,6 @@
 <template>
   <!-- TODO:整体样式修改,白底 -->
-  <div v-show="isScrollDown"><HeadNav></HeadNav></div>
+  <div v-show="isScrollDown"><HomeNav></HomeNav></div>
 
   <div
     class="w-full h-screen overflow-x-hidden overflow-y-auto select-none"
@@ -139,7 +139,7 @@
           <img src="../assets/111.png" alt="" />
         </div>
         <!-- 版权与备案信息 -->
-        <CopyRights>京ICP备18012699号-3</CopyRights>
+        <CopyRights></CopyRights>
       </div>
     </div>
   </div>
@@ -148,7 +148,7 @@
 <script setup>
 import FlipCards from "@/components/FlipCards.vue";
 import CopyRights from "@/components/CopyRights.vue";
-import HeadNav from "@/components/HeadNav.vue";
+import HomeNav from "@/components/HomeNav.vue";
 import { ref } from "vue";
 // import { debounce } from "@/utils/debounce";
 
