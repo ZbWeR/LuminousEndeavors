@@ -60,6 +60,7 @@
 
           <button
             class="font-serif hover:shadow-[5px_5px_4px_#79bbad] hover:-skew-x-12 box-border px-4 py-1 text-xl transition-all border border-zinc-400 text-zinc-400 hover:bg-teal-400 hover:border-none group-hover:text-white group-hover:border-white"
+            @click="router.push({ name: 'about' })"
           >
             查看方向
           </button>
@@ -150,6 +151,10 @@ import FlipCards from "@/components/FlipCards.vue";
 import CopyRights from "@/components/CopyRights.vue";
 import HomeNav from "@/components/HomeNav.vue";
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
 // import { debounce } from "@/utils/debounce";
 
 const missionsText = [
