@@ -1,10 +1,14 @@
 <template>
-  <div class="flex items-center justify-center w-screen h-screen bg-sky-50">
+  <!-- TODO:登录方式切换显示 -->
+  <div class="flex items-center justify-center w-screen h-screen bg-zinc-100">
     <div
-      class="flex w-3/5 overflow-hidden bg-sky-100 rounded-xl h-2/3 rootShadow"
+      class="relative flex w-3/5 overflow-hidden bg-sky-50 rounded-xl h-2/3 rootShadow"
     >
       <!-- 登录 -->
-      <div class="flex flex-col w-1/3 h-full bg-sky-50">
+      <div
+        :class="activeBlock === 'login' ? 'w-2/3' : 'w-1/3 opacity-0 invisible'"
+        class="flex flex-col h-full transition-all duration-1000 bg-sky-50"
+      >
         <form
           action=""
           method="post"
@@ -65,7 +69,12 @@
         </form>
       </div>
       <!-- 注册 -->
-      <div class="w-2/3 h-full bg-sky-50">
+      <div
+        :class="
+          activeBlock === 'register' ? 'w-2/3' : 'w-1/3 opacity-0 invisible'
+        "
+        class="h-full transition-all duration-1000 bg-sky-50"
+      >
         <form
           action=""
           method="post"
@@ -112,7 +121,7 @@
                   :checked="checkedValue.index === index"
                 />
                 <span
-                  class="relative z-10 flex items-center justify-center h-full text-sm transition-all rounded-lg cursor-pointer text-slate-400 peer-checked:text-white"
+                  class="relative z-10 flex items-center justify-center h-full text-sm transition-all duration-500 rounded-lg cursor-pointer text-slate-400 peer-checked:text-white"
                   >{{ item }}</span
                 >
               </label>
@@ -120,7 +129,7 @@
                 :style="{
                   left: `${(checkedValue.index * 100) / 3}%`,
                 }"
-                class="absolute flex items-center justify-center w-1/3 h-full transition-all rounded-lg bg-sky-400"
+                class="absolute flex items-center justify-center w-1/3 h-full transition-all duration-500 rounded-lg bg-sky-400"
               ></div>
             </div>
           </div>
@@ -146,18 +155,6 @@
             </button>
           </div>
           <!-- 验证码 -->
-          <!-- <div class="flex justify-between w-1/2 mt-4">
-            <input
-              class="w-3/5 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
-              type="text"
-              placeholder="请输入验证码..."
-            />
-            <button
-              class="box-border w-1/3 py-2 text-sm text-white transition-all rounded-lg shadow-md hover:bg-sky-500 hover:scale-95 bg-sky-300"
-            >
-              发送验证码
-            </button>
-          </div> -->
 
           <button
             @click.prevent="
@@ -169,6 +166,63 @@
           </button>
         </form>
       </div>
+      <!-- 滑动层 -->
+      <div
+        :style="`transform: translateX(${
+          activeBlock === 'login' ? '200' : '0'
+        }%)`"
+        class="absolute flex items-center justify-center w-1/3 h-full overflow-hidden transition-all duration-1000 bg-sky-50 scrollShadow"
+      >
+        <!-- 圆 -->
+        <div
+          class="absolute transition-all duration-1000 rounded-full bg-sky-50 circleSwitchRight"
+          :style="`transform: translateX(${
+            activeBlock === 'login' ? '-100' : '0'
+          }%)`"
+        ></div>
+        <div
+          class="absolute transition-all duration-1000 rounded-full bg-sky-50 circleSwitchLeft"
+          :style="`transform: translateX(${
+            activeBlock === 'login' ? '25' : '0'
+          }%)`"
+        ></div>
+        <!-- 去登录 -->
+        <div
+          :class="
+            activeBlock === 'register' ? '' : 'opacity-0 invisible absolute'
+          "
+          class="flex flex-col items-center justify-center transition-all duration-1000"
+        >
+          <h1 class="font-sans text-xl font-bold tracking-wider">
+            ✨Welcome Back!✨
+          </h1>
+          <img class="w-1/2 mt-6" src="../assets/register.png" alt="" />
+          <p class="mt-6 text-sm select-none text-slate-400">
+            已有账号？<span
+              class="cursor-pointer text-sky-400"
+              @click="activeBlock = 'login'"
+              >快去登录吧！</span
+            >
+          </p>
+        </div>
+        <!-- 去注册 -->
+        <div
+          :class="activeBlock === 'login' ? '' : 'opacity-0 invisible absolute'"
+          class="flex flex-col items-center justify-center transition-all duration-1000"
+        >
+          <h1 class="font-sans text-xl font-bold tracking-wider">
+            🎉欢迎来到光点计划🚀
+          </h1>
+          <img class="w-1/2 mt-6" src="../assets/logo.png" alt="" />
+          <p class="mt-6 text-sm select-none text-slate-400">
+            没有账号？<span
+              class="cursor-pointer text-sky-400"
+              @click="activeBlock = 'register'"
+              >点击注册！</span
+            >
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -176,12 +230,15 @@
 <script setup>
 import { ref } from "vue";
 const checkedValue = ref({ value: "", index: 1 });
-console.log(checkedValue.value.index);
+const activeBlock = ref("login");
 </script>
 
 <style scoped>
+* {
+  user-select: none;
+}
 .rootShadow {
-  box-shadow: 6px 6px 8px #d1d9e6, -6px -6px 8px rgba(220, 220, 220, 0.7);
+  box-shadow: 6px 6px 8px #d1d9e6, -6px -6px 8px rgba(250, 250, 250, 1);
 }
 .inputShadow {
   box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3),
@@ -196,6 +253,26 @@ console.log(checkedValue.value.index);
 .radioBoxShadow {
   box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.3),
     inset -3px -3px 6px rgba(220, 220, 220, 0.7);
+}
+.scrollShadow {
+  box-shadow: 2px 2px 6px #d1d9e6, -2px -2px 6px #d1d9e6;
+}
+
+.circleSwitchRight {
+  width: 200px;
+  height: 200px;
+  top: -100px;
+  right: -100px;
+  box-shadow: inset 6px 2px 4px rgba(0, 0, 0, 0.2),
+    inset -3px -3px 6px rgba(220, 220, 220, 0.8);
+}
+.circleSwitchLeft {
+  width: 300px;
+  height: 300px;
+  bottom: -150px;
+  left: -150px;
+  box-shadow: inset -4px 2px 4px rgba(0, 0, 0, 0.2),
+    inset -3px -3px 6px rgba(220, 220, 220, 0.8);
 }
 
 /* 去除数字input的自带样式 */
