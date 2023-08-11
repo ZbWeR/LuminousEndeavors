@@ -2,7 +2,7 @@
   <!-- TODO:登录方式切换显示 -->
   <div class="flex items-center justify-center w-screen h-screen bg-zinc-100">
     <div
-      class="relative flex w-3/5 overflow-hidden bg-sky-50 rounded-xl h-2/3 rootShadow"
+      class="relative flex w-3/5 overflow-hidden bg-slate-50 rounded-xl h-2/3 rootShadow"
     >
       <!-- 登录 -->
       <div
@@ -85,12 +85,16 @@
           >
             Sign Up
           </h1>
+          <!-- 用户名 -->
           <input
+            v-model="registerInfo.nickName"
             class="block w-1/2 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow bg-sky-50"
             type="text"
             placeholder="UserName"
           />
+          <!-- 密码 -->
           <input
+            v-model="registerInfo.password"
             class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
             type="password"
             placeholder="Password"
@@ -100,8 +104,9 @@
             <!-- 年龄 -->
             <input
               class="w-16 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
-              type=""
+              type="number"
               placeholder="Age"
+              v-model="registerInfo.age"
             />
             <!-- 性别 -->
             <div
@@ -117,8 +122,8 @@
                   class="hidden peer"
                   name="sex"
                   :value="{ value: item, index }"
-                  v-model="checkedValue"
-                  :checked="checkedValue.index === index"
+                  v-model="registerInfo.gender"
+                  :checked="registerInfo.gender.index === index"
                 />
                 <span
                   class="relative z-10 flex items-center justify-center h-full text-sm transition-all duration-500 rounded-lg cursor-pointer text-slate-400 peer-checked:text-white"
@@ -127,7 +132,7 @@
               </label>
               <div
                 :style="{
-                  left: `${(checkedValue.index * 100) / 3}%`,
+                  left: `${(registerInfo.gender.index * 100) / 3}%`,
                 }"
                 class="absolute flex items-center justify-center w-1/3 h-full transition-all duration-500 rounded-lg bg-sky-400"
               ></div>
@@ -138,6 +143,7 @@
             class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
             type="text"
             placeholder="PhoneNumber"
+            v-model="registerInfo.phoneNumber"
           />
           <div
             class="flex items-center justify-between w-1/2 py-2 pl-4 pr-2 mt-4 duration-300 rounded-lg outline-none inputShadow bg-sky-50"
@@ -145,21 +151,21 @@
             <input
               class="flex-1 tracking-wider outline-none placeholder:text-sm bg-sky-50"
               type="text"
+              v-model="registerInfo.code"
               placeholder="请输入验证码..."
             />
-            <!-- TODO:节流处理 -->
             <button
+              @click="getVerifyCode"
+              :disabled="verifyCodeBtn.disabled"
               class="text-sm shrink-0 disabled:cursor-not-allowed disabled:text-slate-400"
             >
-              获取验证码
+              {{ verifyCodeBtn.content }}
             </button>
           </div>
           <!-- 验证码 -->
 
           <button
-            @click.prevent="
-              console.log(((checkedValue.value.index + 1) * 100) / 3)
-            "
+            @click.prevent="handleRegister"
             class="shadow-md box-border w-1/4 px-1 py-3 mt-12 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
           >
             注册
@@ -228,9 +234,49 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-const checkedValue = ref({ value: "", index: 1 });
+import { ref, reactive } from "vue";
+// const gender = ref({ value: "", index: 1 });
 const activeBlock = ref("login");
+
+const registerInfo = reactive({
+  nickName: "",
+  password: "",
+  phoneNumber: "",
+  gender: { value: "N/A", index: 1 },
+  age: "",
+  code: "",
+});
+
+// 检查电话合法性
+// const regexPhone = /^((\+|00)86)?1\d{10}$/;
+// 检查昵称合法性
+// const regexNickName = /[\u4E00-\u9FA5a-zA-Z0-9_]{4,10}/;
+
+// 提交注册信息
+function handleRegister() {
+  console.log(registerInfo);
+}
+// 获取短信验证码
+const verifyCodeBtn = reactive({
+  disabled: false,
+  content: "获取验证码",
+});
+function getVerifyCode() {
+  // TODO:调用获取验证码的api
+  // 展示遮罩信息，封装遮罩组件.
+  let waitCodeSec = 5;
+  verifyCodeBtn.disabled = true;
+  let timer = setInterval(() => {
+    verifyCodeBtn.content = `${waitCodeSec}s 后重试`;
+    waitCodeSec--;
+    if (waitCodeSec < 0) {
+      verifyCodeBtn.content = "获取验证码";
+      verifyCodeBtn.disabled = false;
+      clearInterval(timer);
+    }
+  }, 1000);
+  // const phoneNumber = registerInfo.phoneNumber;
+}
 </script>
 
 <style scoped>
