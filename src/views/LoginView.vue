@@ -102,7 +102,7 @@
           <input
             v-model="registerInfo.password"
             :class="registerInfo.password ? 'bg-sky-50' : 'bg-pink-50'"
-            class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
+            class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
             type="password"
             placeholder="Password"
           />
@@ -163,7 +163,7 @@
           <!-- 验证码 -->
           <div
             :class="registerInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
-            class="flex items-center justify-between w-1/2 py-2 pl-4 pr-2 mt-4 duration-300 rounded-lg outline-none inputShadow bg-sky-50"
+            class="flex items-center justify-between w-1/2 py-2 pl-4 pr-2 mt-4 overflow-hidden duration-300 rounded-lg outline-none inputShadow"
           >
             <input
               :class="registerInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
@@ -173,7 +173,7 @@
               placeholder="请输入验证码..."
             />
             <button
-              @click="getVerifyCode"
+              @click.prevent="getVerifyCode"
               :disabled="verifyCodeBtn.disabled"
               class="text-sm shrink-0 disabled:cursor-not-allowed disabled:text-slate-400"
             >
@@ -262,6 +262,7 @@ import {
   verifyCaptchaImage,
   SendVerifyCode,
   verifyPhoneNumber,
+  register,
 } from "@/request/api/auth";
 
 // 滑动切换样式相关
@@ -282,7 +283,7 @@ const registerInfo = reactive({
   age: "",
   phoneNumber: "",
   verifyCode: "",
-  verifyCodeTempKey: "",
+  verifyCodeTempKey: "1690692366519",
 });
 
 // 检查昵称合法性
@@ -322,28 +323,34 @@ function phoneNumberTest() {
 
 // 提交注册信息
 async function handleRegister() {
-  console.log(registerInfo);
-  // 校验注册信息是否填写完毕
-  let keysArr = Object.keys(registerInfo);
-  for (let item of keysArr) {
-    if (registerInfo[item] === "") {
-      errorInput.code = item;
-      // TODO:未测试
-      errorInput.message =
-        item !== "verifyCodeTempKey" ? `请输入 ${item}` : "请先获取验证码";
-      return;
+  try {
+    // 校验注册信息是否填写完毕
+    let keysArr = Object.keys(registerInfo);
+    for (let item of keysArr) {
+      if (registerInfo[item] === "") {
+        errorInput.code = item;
+        // TODO:未测试
+        errorInput.message =
+          item !== "verifyCodeTempKey" ? `请输入 ${item}` : "请先获取验证码";
+        return;
+      }
     }
-  }
-  if (errorInput.code) return;
-  alert("注册成功");
-  // 验证码校验
-  let { data } = await verifyPhoneNumber();
-  if (data.code === 200) {
-    // 调用注册接口
-  }
+    if (errorInput.code) return;
 
-  // let res = await verifyCaptchaImage();
-  // console.log(res.data);
+    // 验证码校验,校验未通过的会抛出错误从而中止执行
+    await verifyPhoneNumber(
+      registerInfo.verifyCode,
+      registerInfo.verifyCodeTempKey
+    );
+    // 调用注册接口
+    // let { data } = await register({
+    //   ...registerInfo,
+    //   gender: register.gender.value,
+    // });
+    // console.log(data);
+  } catch (err) {
+    return;
+  }
 }
 // 获取短信验证码
 const verifyCodeBtn = reactive({
@@ -353,10 +360,10 @@ const verifyCodeBtn = reactive({
 async function getVerifyCode() {
   // TODO:调用获取验证码的api
   // 展示遮罩信息，封装遮罩组件.
-  SendVerifyCode(registerInfo.phoneNumber).then((res) => {
-    console.log(res);
-  });
-  let waitCodeSec = 5;
+  let { data } = await SendVerifyCode(registerInfo.phoneNumber);
+  registerInfo.verifyCodeTempKey = data.data;
+
+  let waitCodeSec = 60;
   verifyCodeBtn.disabled = true;
   let timer = setInterval(() => {
     verifyCodeBtn.content = `${waitCodeSec}s 后重试`;
