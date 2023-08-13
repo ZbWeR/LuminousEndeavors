@@ -15,7 +15,7 @@
           class="flex flex-col items-center justify-center w-full h-full"
         >
           <h1
-            class="mb-20 font-mono text-4xl font-bold tracking-widest text-center"
+            class="mb-16 font-mono text-4xl font-bold tracking-widest text-center"
           >
             Log In
           </h1>
@@ -78,23 +78,30 @@
         <form
           action=""
           method="post"
-          class="flex flex-col items-center justify-center w-full h-full"
+          class="flex flex-col items-center justify-center w-full h-full transition-all"
         >
           <h1
-            class="mb-20 font-mono text-4xl font-bold tracking-widest text-center"
+            class="mb-16 font-mono text-4xl font-bold tracking-widest text-center"
           >
             Sign Up
           </h1>
           <!-- 用户名 -->
           <input
             v-model="registerInfo.nickName"
-            class="block w-1/2 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow bg-sky-50"
+            @change="nickNameTest"
+            class="block w-1/2 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow"
+            :class="
+              registerInfo.nickName === '' || errorInput.code === 'nickName'
+                ? 'bg-pink-50'
+                : 'bg-sky-50'
+            "
             type="text"
-            placeholder="UserName"
+            placeholder="NickName"
           />
           <!-- 密码 -->
           <input
             v-model="registerInfo.password"
+            :class="registerInfo.password ? 'bg-sky-50' : 'bg-pink-50'"
             class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
             type="password"
             placeholder="Password"
@@ -103,8 +110,9 @@
           <div class="flex justify-between w-1/2 gap-4 mt-4">
             <!-- 年龄 -->
             <input
-              class="w-16 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
+              class="w-16 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
               type="number"
+              :class="registerInfo.age ? 'bg-sky-50' : 'bg-pink-50'"
               placeholder="Age"
               v-model="registerInfo.age"
             />
@@ -140,18 +148,28 @@
           </div>
           <!-- 电话号码 -->
           <input
-            class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
+            :class="
+              registerInfo.phoneNumber === '' ||
+              errorInput.code === 'phoneNumber'
+                ? 'bg-pink-50'
+                : 'bg-sky-50'
+            "
+            class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
             type="text"
             placeholder="PhoneNumber"
+            @change="phoneNumberTest"
             v-model="registerInfo.phoneNumber"
           />
+          <!-- 验证码 -->
           <div
+            :class="registerInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
             class="flex items-center justify-between w-1/2 py-2 pl-4 pr-2 mt-4 duration-300 rounded-lg outline-none inputShadow bg-sky-50"
           >
             <input
-              class="flex-1 tracking-wider outline-none placeholder:text-sm bg-sky-50"
+              :class="registerInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
+              class="flex-1 tracking-wider outline-none placeholder:text-sm"
               type="text"
-              v-model="registerInfo.code"
+              v-model="registerInfo.verifyCode"
               placeholder="请输入验证码..."
             />
             <button
@@ -162,11 +180,16 @@
               {{ verifyCodeBtn.content }}
             </button>
           </div>
-          <!-- 验证码 -->
-
+          <!-- 非法输入提示 -->
+          <p
+            :class="errorInput.code ? '' : ' invisible'"
+            class="mt-4 text-xs text-red-400"
+          >
+            {{ errorInput.message }}
+          </p>
           <button
             @click.prevent="handleRegister"
-            class="shadow-md box-border w-1/4 px-1 py-3 mt-12 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
+            class="shadow-md box-border w-1/4 px-1 py-3 mt-6 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
           >
             注册
           </button>
@@ -235,35 +258,104 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-// const gender = ref({ value: "", index: 1 });
+import {
+  verifyCaptchaImage,
+  SendVerifyCode,
+  verifyPhoneNumber,
+} from "@/request/api/auth";
+
+// 滑动切换样式相关
 const activeBlock = ref("login");
 
+// 注册非法输入提示信息
+const errorInput = reactive({
+  message: "",
+  code: "",
+  // code为空表示所有信息均合法
+});
+
+// 注册信息对象
 const registerInfo = reactive({
   nickName: "",
   password: "",
-  phoneNumber: "",
   gender: { value: "N/A", index: 1 },
   age: "",
-  code: "",
+  phoneNumber: "",
+  verifyCode: "",
+  verifyCodeTempKey: "",
 });
 
-// 检查电话合法性
-// const regexPhone = /^((\+|00)86)?1\d{10}$/;
 // 检查昵称合法性
-// const regexNickName = /[\u4E00-\u9FA5a-zA-Z0-9_]{4,10}/;
+function nickNameTest() {
+  const regexNickName = /^[\u4E00-\u9FA5a-zA-Z0-9_]{4,10}$/;
+  const { nickName } = registerInfo;
+  if (nickName === "") {
+    errorInput.message = "用户名不能为空哦~";
+  } else if (nickName.length < 4) {
+    errorInput.message = "用户名太短啦!";
+  } else if (nickName.length > 10) {
+    errorInput.message = "用户名太长啦!";
+  } else if (!regexNickName.test(nickName)) {
+    errorInput.message = "用户名中含有非法字符";
+  } else {
+    errorInput.message = "";
+    errorInput.code = "";
+    return;
+  }
+  errorInput.code = "nickName";
+}
+// 检查电话合法性
+function phoneNumberTest() {
+  const regexPhone = /^((\+|00)86)?1\d{10}$/;
+  const { phoneNumber } = registerInfo;
+  if (phoneNumber === "") {
+    errorInput.message = "电话号码不能为空哦~";
+  } else if (!regexPhone.test(phoneNumber)) {
+    errorInput.message = "电话号码格式有误";
+  } else {
+    errorInput.message = "";
+    errorInput.code = "";
+    return;
+  }
+  errorInput.code = "phoneNumber";
+}
 
 // 提交注册信息
-function handleRegister() {
+async function handleRegister() {
   console.log(registerInfo);
+  // 校验注册信息是否填写完毕
+  let keysArr = Object.keys(registerInfo);
+  for (let item of keysArr) {
+    if (registerInfo[item] === "") {
+      errorInput.code = item;
+      // TODO:未测试
+      errorInput.message =
+        item !== "verifyCodeTempKey" ? `请输入 ${item}` : "请先获取验证码";
+      return;
+    }
+  }
+  if (errorInput.code) return;
+  alert("注册成功");
+  // 验证码校验
+  let { data } = await verifyPhoneNumber();
+  if (data.code === 200) {
+    // 调用注册接口
+  }
+
+  // let res = await verifyCaptchaImage();
+  // console.log(res.data);
 }
 // 获取短信验证码
 const verifyCodeBtn = reactive({
   disabled: false,
   content: "获取验证码",
 });
-function getVerifyCode() {
+async function getVerifyCode() {
   // TODO:调用获取验证码的api
   // 展示遮罩信息，封装遮罩组件.
+  SendVerifyCode(registerInfo.phoneNumber).then((res) => {
+    console.log(res);
+  });
   let waitCodeSec = 5;
   verifyCodeBtn.disabled = true;
   let timer = setInterval(() => {
@@ -275,7 +367,6 @@ function getVerifyCode() {
       clearInterval(timer);
     }
   }, 1000);
-  // const phoneNumber = registerInfo.phoneNumber;
 }
 </script>
 
