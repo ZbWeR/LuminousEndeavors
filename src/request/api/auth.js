@@ -68,3 +68,40 @@ export function userRegister(data){
         data:data
     })
 }
+
+/**
+ * 使用手机号与密码登录
+ * @param {Object} data - 包含手机号与密码的对象 
+ * @returns 包含响应数据的Promise对象
+ */
+export function userLoginByPassword(data){
+    return service({
+        method: 'POST',
+        url: '/user/login',
+        data
+    })
+}
+
+/**
+ * 获取微信登录二维码
+ * @returns 包含响应数据的Promise对象
+ */
+export function getWxQr(){
+    return service({
+        method: 'GET',
+        url:'/wxUser/wxQr'
+    })
+}
+
+/**
+ * 获取扫码状态
+ * @param {String} tempUserId - 临时id
+ * @returns 包含响应数据的Promise对象
+ */
+export function getScanStatus(tempUserId){
+    return service({
+        method: 'GET',
+        url:'/wxUser/isLogin',
+        params:{tempUserId}
+    })
+}
