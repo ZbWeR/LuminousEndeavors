@@ -99,8 +99,10 @@
             placeholder="NickName"
           />
           <!-- 密码 -->
+          <!-- TODO:显示密码功能 -->
           <input
             v-model="registerInfo.password"
+            @change="passWordTest"
             :class="registerInfo.password ? 'bg-sky-50' : 'bg-pink-50'"
             class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
             type="password"
@@ -121,7 +123,7 @@
               class="relative flex flex-1 overflow-hidden rounded-lg shadow-sm radioBoxShadow"
             >
               <label
-                v-for="(item, index) in ['Male', 'N/A', 'Female']"
+                v-for="(item, index) in Object.keys(genderOptions)"
                 :key="index"
                 class="flex-1 h-full text-center"
               >
@@ -129,7 +131,7 @@
                   type="radio"
                   class="hidden peer"
                   name="sex"
-                  :value="{ value: item, index }"
+                  :value="{ value: genderOptions[item], index }"
                   v-model="registerInfo.gender"
                   :checked="registerInfo.gender.index === index"
                 />
@@ -189,6 +191,7 @@
           </p>
           <button
             @click.prevent="handleRegister"
+            :disabled="registerRunning"
             class="shadow-md box-border w-1/4 px-1 py-3 mt-6 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
           >
             注册
@@ -262,8 +265,9 @@ import {
   verifyCaptchaImage,
   SendVerifyCode,
   verifyPhoneNumber,
-  register,
+  userRegister,
 } from "@/request/api/auth";
+import { MessageCreator } from "../components/message/index";
 
 // 滑动切换样式相关
 const activeBlock = ref("login");
@@ -283,8 +287,9 @@ const registerInfo = reactive({
   age: "",
   phoneNumber: "",
   verifyCode: "",
-  verifyCodeTempKey: "1690692366519",
+  verifyCodeTempKey: "1691253948454",
 });
+const genderOptions = { Male: "男", "N/A": "无", Female: "女" };
 
 // 检查昵称合法性
 function nickNameTest() {
@@ -301,9 +306,10 @@ function nickNameTest() {
   } else {
     errorInput.message = "";
     errorInput.code = "";
-    return;
+    return true;
   }
   errorInput.code = "nickName";
+  return false;
 }
 // 检查电话合法性
 function phoneNumberTest() {
@@ -316,20 +322,46 @@ function phoneNumberTest() {
   } else {
     errorInput.message = "";
     errorInput.code = "";
-    return;
+    return true;
   }
   errorInput.code = "phoneNumber";
+  return false;
+}
+// 密码长度校验
+function passWordTest() {
+  const regexPassWord = /.{6}/;
+  const { password } = registerInfo;
+  if (password === "") {
+    errorInput.message = "密码不能为空哦~";
+  } else if (!regexPassWord.test(password)) {
+    errorInput.message = "密码至少需要6位哦";
+  } else {
+    errorInput.message = "";
+    errorInput.code = "";
+    return true;
+  }
+  errorInput.code = "password";
+  return false;
 }
 
+const message = new MessageCreator();
+const registerRunning = ref(false);
+
+import { useRouter } from "vue-router";
+const router = useRouter();
 // 提交注册信息
 async function handleRegister() {
   try {
+    // 检验注册信息是否合法
+    if (!nickNameTest() || !passWordTest() || !phoneNumberTest()) {
+      return;
+    }
     // 校验注册信息是否填写完毕
+    errorInput.code = "";
     let keysArr = Object.keys(registerInfo);
     for (let item of keysArr) {
       if (registerInfo[item] === "") {
         errorInput.code = item;
-        // TODO:未测试
         errorInput.message =
           item !== "verifyCodeTempKey" ? `请输入 ${item}` : "请先获取验证码";
         return;
@@ -337,19 +369,29 @@ async function handleRegister() {
     }
     if (errorInput.code) return;
 
+    registerRunning.value = true; // 节流处理
     // 验证码校验,校验未通过的会抛出错误从而中止执行
     await verifyPhoneNumber(
       registerInfo.verifyCode,
       registerInfo.verifyCodeTempKey
     );
     // 调用注册接口
-    // let { data } = await register({
-    //   ...registerInfo,
-    //   gender: register.gender.value,
-    // });
+    let { data } = await userRegister({
+      ...registerInfo,
+      gender: registerInfo.gender.value,
+    });
+    // 注册成功保存token
     // console.log(data);
+    localStorage.setItem("token", data.data.token);
+    // 跳转个人中心
+    router.replace({ name: "home" });
   } catch (err) {
     return;
+  } finally {
+    // 节流处理
+    setTimeout(() => {
+      registerRunning.value = false;
+    }, 500);
   }
 }
 // 获取短信验证码
@@ -358,8 +400,7 @@ const verifyCodeBtn = reactive({
   content: "获取验证码",
 });
 async function getVerifyCode() {
-  // TODO:调用获取验证码的api
-  // 展示遮罩信息，封装遮罩组件.
+  if (!phoneNumberTest()) return;
   let { data } = await SendVerifyCode(registerInfo.phoneNumber);
   registerInfo.verifyCodeTempKey = data.data;
 
