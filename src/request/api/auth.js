@@ -61,9 +61,9 @@ export function verifyCaptchaImage(){
  * @param {Object} data - 包含注册信息的对象 
  * @returns 包含响应数据的Promise对象
  */
-export function register(data){
+export function userRegister(data){
     return service({
-        method:'POST',
+        method: 'POST',
         url:'/user/register',
         data:data
     })

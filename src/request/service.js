@@ -1,6 +1,8 @@
 import axios from "axios";
+import { MessageCreator } from "@/components/message";
 
 function createService(){
+    const messageBox = new MessageCreator();
     const service = axios.create({
         baseURL: 'http://1.15.179.24:9520',
         timeout: 5000,
@@ -21,7 +23,11 @@ function createService(){
             const apiData = response.data;
             const {code,message} = apiData;
             if(code !== 200){
-                console.log(message);
+                messageBox.present({
+                    message,
+                    msgType:'error',
+                    duration:2000
+                })
                 throw new Error(message);
             }
             return response;
