@@ -5,6 +5,7 @@ import Message from './index.vue';
 theOptions:{
     duration - 消息提示框持续时间
     message - 消息内容
+    msgType - 消息类型
 }
 */
 
@@ -39,6 +40,7 @@ export class MessageCreator {
     }
 
     dismiss() {
+        // TODO:删除上一个message时更新其他实例的top
         let container = this.queue.shift()?.container;
         if(container){
             container.classList.add('animate-messageAnimation');
