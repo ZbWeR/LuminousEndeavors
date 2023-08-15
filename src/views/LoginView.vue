@@ -19,28 +19,81 @@
           >
             Log In
           </h1>
-          <input
-            class="block w-1/2 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow bg-sky-50"
-            type="text"
-            placeholder="Number"
-          />
-          <input
-            class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
-            type="password"
-            placeholder="Password"
-          />
-          <div class="relative w-1/2 mt-3 cursor-pointer">
-            <p
-              class="absolute right-0 inline-block text-sm transition-all border-b select-none border-slate-400 hover:text-black text-slate-400"
-            >
-              忘记密码?
-            </p>
-          </div>
-          <button
-            class="shadow-md box-border w-1/4 px-1 py-3 mt-12 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
+          <!-- 账号密码登录 -->
+          <div
+            class="flex flex-col items-center w-1/2"
+            v-show="loginInfo.loginWay === 'password'"
           >
-            登录
-          </button>
+            <input
+              class="block w-full px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow bg-sky-50"
+              type="text"
+              v-model="loginInfo.userName"
+              placeholder="PhoneNumber"
+            />
+            <input
+              class="block w-full px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow bg-sky-50 placeholder:text-sm"
+              type="password"
+              v-model="loginInfo.password"
+              placeholder="Password"
+            />
+            <div class="relative w-full mt-3 cursor-pointer">
+              <p
+                class="absolute right-0 inline-block text-sm transition-all border-b select-none border-slate-400 hover:text-black text-slate-400"
+              >
+                忘记密码?
+              </p>
+            </div>
+            <button
+              :disabled="
+                LoginRunning ||
+                loginInfo.userName === '' ||
+                loginInfo.password.length < 6
+              "
+              @click.prevent="handleLogin"
+              class="disabled:bg-sky-200 disabled:cursor-not-allowed shadow-md box-border w-1/2 px-1 py-3 mt-12 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400 disabled:hover:scale-100"
+            >
+              登录
+            </button>
+          </div>
+          <!-- 微信登录 -->
+          <div class="w-1/2" v-show="loginInfo.loginWay === 'weChat'">
+            <img
+              class="w-3/4 mx-auto"
+              src="https://oss.jylt.cc/yideng/img/qr/5ae9edeb-aa7c-464c-8225-796b594c0d6b.png?Expires=1692101315&OSSAccessKeyId=LTAI4GJa4sDo6cNa48uHKWde&Signature=sE%2FHy621G9LTblDtNit3k9WKf6U%3D"
+              alt=""
+            />
+          </div>
+          <!-- 手机验证码登录,废弃 -->
+          <div
+            hidden
+            class="w-1/2"
+            v-show="loginInfo.loginWay === 'phoneNumber'"
+          >
+            <input
+              class="block w-full px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow bg-sky-50"
+              type="text"
+              v-model="loginInfo.userName"
+              placeholder="PhoneNumber"
+            />
+            <!-- 验证码 -->
+            <div
+              class="flex items-center justify-between py-2 pl-4 pr-2 mt-4 overflow-hidden duration-300 rounded-lg outline-none bg-sky-50 inputShadow"
+            >
+              <input
+                class="flex-1 tracking-wider outline-none placeholder:text-sm bg-sky-50"
+                type="text"
+                v-model="phoneCodeInfo.verifyCode"
+                placeholder="请输入验证码..."
+              />
+              <button
+                @click.prevent="getVerifyCode(loginInfo.userName)"
+                :disabled="verifyCodeBtn.disabled"
+                class="text-sm shrink-0 disabled:cursor-not-allowed disabled:text-slate-400"
+              >
+                {{ verifyCodeBtn.content }}
+              </button>
+            </div>
+          </div>
           <!-- 切换登录方式 -->
           <div class="w-3/5 mt-14">
             <div class="flex items-center justify-around">
@@ -51,19 +104,31 @@
             <div class="flex justify-center gap-5 mt-4">
               <!-- 微信登陆 -->
               <svg
+                v-if="loginInfo.loginWay === 'password'"
+                @click="changeLoginWay"
                 class="cursor-pointer w-9 h-9 icon fill-emerald-400"
                 title="微信"
                 aria-hidden="true"
               >
                 <use xlink:href="#icon-weixindenglu"></use>
               </svg>
-              <!-- 验证码登录 -->
+              <!-- 账号密码登录 -->
               <svg
+                v-else
+                @click="changeLoginWay"
                 class="cursor-pointer w-9 h-9 icon fill-sky-400"
                 aria-hidden="true"
               >
                 <use xlink:href="#icon-account_sms"></use>
               </svg>
+              <!-- 验证码登录 -->
+              <!-- <svg
+                @click="loginInfo.loginWay = 'phoneNumber'"
+                class="cursor-pointer w-9 h-9 icon fill-sky-400"
+                aria-hidden="true"
+              >
+                <use xlink:href="#icon-account_sms"></use>
+              </svg> -->
             </div>
           </div>
         </form>
@@ -164,18 +229,18 @@
           />
           <!-- 验证码 -->
           <div
-            :class="registerInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
+            :class="phoneCodeInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
             class="flex items-center justify-between w-1/2 py-2 pl-4 pr-2 mt-4 overflow-hidden duration-300 rounded-lg outline-none inputShadow"
           >
             <input
-              :class="registerInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
+              :class="phoneCodeInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
               class="flex-1 tracking-wider outline-none placeholder:text-sm"
               type="text"
-              v-model="registerInfo.verifyCode"
+              v-model="phoneCodeInfo.verifyCode"
               placeholder="请输入验证码..."
             />
             <button
-              @click.prevent="getVerifyCode"
+              @click.prevent="getVerifyCode(registerInfo.phoneNumber)"
               :disabled="verifyCodeBtn.disabled"
               class="text-sm shrink-0 disabled:cursor-not-allowed disabled:text-slate-400"
             >
@@ -191,8 +256,8 @@
           </p>
           <button
             @click.prevent="handleRegister"
-            :disabled="registerRunning"
-            class="shadow-md box-border w-1/4 px-1 py-3 mt-6 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
+            :disabled="registerRunning || phoneCodeInfo.verifyCode === ''"
+            class="disabled:cursor-not-allowed disabled:bg-sky-200 shadow-md box-border w-1/4 px-1 py-3 mt-6 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
           >
             注册
           </button>
@@ -262,12 +327,12 @@
 <script setup>
 import { ref, reactive } from "vue";
 import {
-  verifyCaptchaImage,
+  userLoginByPassword,
   SendVerifyCode,
   verifyPhoneNumber,
   userRegister,
 } from "@/request/api/auth";
-import { MessageCreator } from "../components/message/index";
+import { MessageCreator } from "@/components/message";
 
 // 滑动切换样式相关
 const activeBlock = ref("login");
@@ -286,8 +351,6 @@ const registerInfo = reactive({
   gender: { value: "N/A", index: 1 },
   age: "",
   phoneNumber: "",
-  verifyCode: "",
-  verifyCodeTempKey: "1691253948454",
 });
 const genderOptions = { Male: "男", "N/A": "无", Female: "女" };
 
@@ -344,8 +407,7 @@ function passWordTest() {
   return false;
 }
 
-const message = new MessageCreator();
-const registerRunning = ref(false);
+const registerRunning = ref(false); // 节流
 
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -362,8 +424,7 @@ async function handleRegister() {
     for (let item of keysArr) {
       if (registerInfo[item] === "") {
         errorInput.code = item;
-        errorInput.message =
-          item !== "verifyCodeTempKey" ? `请输入 ${item}` : "请先获取验证码";
+        errorInput.message = `请输入 ${item}`;
         return;
       }
     }
@@ -372,8 +433,8 @@ async function handleRegister() {
     registerRunning.value = true; // 节流处理
     // 验证码校验,校验未通过的会抛出错误从而中止执行
     await verifyPhoneNumber(
-      registerInfo.verifyCode,
-      registerInfo.verifyCodeTempKey
+      phoneCodeInfo.verifyCode,
+      phoneCodeInfo.verifyCodeTempKey
     );
     // 调用注册接口
     let { data } = await userRegister({
@@ -381,11 +442,11 @@ async function handleRegister() {
       gender: registerInfo.gender.value,
     });
     // 注册成功保存token
-    // console.log(data);
     localStorage.setItem("token", data.data.token);
     // 跳转个人中心
     router.replace({ name: "home" });
   } catch (err) {
+    phoneCodeInfo.verifyCode = "";
     return;
   } finally {
     // 节流处理
@@ -395,14 +456,18 @@ async function handleRegister() {
   }
 }
 // 获取短信验证码
+const phoneCodeInfo = reactive({
+  verifyCode: "",
+  verifyCodeTempKey: "1691253948454",
+});
 const verifyCodeBtn = reactive({
   disabled: false,
   content: "获取验证码",
 });
-async function getVerifyCode() {
+async function getVerifyCode(phoneNumber) {
   if (!phoneNumberTest()) return;
-  let { data } = await SendVerifyCode(registerInfo.phoneNumber);
-  registerInfo.verifyCodeTempKey = data.data;
+  let { data } = await SendVerifyCode(phoneNumber);
+  phoneCodeInfo.verifyCodeTempKey = data.data;
 
   let waitCodeSec = 60;
   verifyCodeBtn.disabled = true;
@@ -415,6 +480,71 @@ async function getVerifyCode() {
       clearInterval(timer);
     }
   }, 1000);
+}
+
+// 登录信息对象
+const loginInfo = reactive({
+  userName: "",
+  password: "",
+  verifyCode: "",
+  verifyCodeTempKey: "",
+  loginWay: "password",
+});
+
+const message = new MessageCreator();
+
+// 变换登录方式
+async function changeLoginWay() {
+  if (loginInfo.loginWay === "password") {
+    loginInfo.loginWay = "weChat";
+    // TODO:获取二维码SRC
+
+    // 开启扫码轮询判断登录状态
+    getScanState();
+  } else {
+    loginInfo.loginWay = "password";
+  }
+}
+
+// TODO:微信登陆状态
+async function getScanState() {}
+
+//  提交登录信息
+async function handleLogin() {
+  if (loginInfo.loginWay === "password") loginByPassWord();
+  else if (loginInfo.loginWay === "phoneNumber") loginByPhoneNumber();
+}
+
+// 账号密码登录
+const LoginRunning = ref(false); // 节流
+async function loginByPassWord() {
+  try {
+    // 发送登录请求
+    LoginRunning.value = true;
+    let { data } = await userLoginByPassword(loginInfo);
+    // 登录成功保存token
+    localStorage.setItem("token", data.data.token);
+    // 跳转个人中心
+    router.replace({ name: "home" });
+  } catch {
+    return;
+  } finally {
+    // 节流处理
+    setTimeout(() => {
+      LoginRunning.value = false;
+    }, 500);
+  }
+}
+// 手机验证码登录：废弃
+async function loginByPhoneNumber() {
+  try {
+    await verifyPhoneNumber(
+      phoneCodeInfo.verifyCode,
+      phoneCodeInfo.verifyCodeTempKey
+    );
+  } catch {
+    return;
+  }
 }
 </script>
 
@@ -468,6 +598,7 @@ input::-webkit-inner-spin-button {
 }
 /* 在Firefox浏览器下 */
 input[type="number"] {
+  appearance: none;
   -moz-appearance: textfield;
 }
 </style>
