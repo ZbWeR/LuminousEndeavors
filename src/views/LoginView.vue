@@ -59,7 +59,8 @@
           <div class="w-1/2" v-show="loginInfo.loginWay === 'weChat'">
             <img
               class="w-3/4 mx-auto"
-              src="https://oss.jylt.cc/yideng/img/qr/5ae9edeb-aa7c-464c-8225-796b594c0d6b.png?Expires=1692101315&OSSAccessKeyId=LTAI4GJa4sDo6cNa48uHKWde&Signature=sE%2FHy621G9LTblDtNit3k9WKf6U%3D"
+              :class="wxQrCodeInfo.tempUserId ? '' : 'blur-[2px]'"
+              :src="wxQrCodeInfo.src"
               alt=""
             />
           </div>
@@ -104,31 +105,32 @@
             <div class="flex justify-center gap-5 mt-4">
               <!-- 微信登陆 -->
               <svg
-                v-if="loginInfo.loginWay === 'password'"
+                v-show="loginInfo.loginWay !== 'weChat'"
                 @click="changeLoginWay"
                 class="cursor-pointer w-9 h-9 icon fill-emerald-400"
                 title="微信"
                 aria-hidden="true"
               >
-                <use xlink:href="#icon-weixindenglu"></use>
+                <use xlink:href="#icon-weChat"></use>
               </svg>
               <!-- 账号密码登录 -->
               <svg
-                v-else
+                v-show="loginInfo.loginWay !== 'password'"
                 @click="changeLoginWay"
                 class="cursor-pointer w-9 h-9 icon fill-sky-400"
                 aria-hidden="true"
               >
-                <use xlink:href="#icon-account_sms"></use>
+                <use xlink:href="#icon-password"></use>
               </svg>
               <!-- 验证码登录 -->
-              <!-- <svg
-                @click="loginInfo.loginWay = 'phoneNumber'"
-                class="cursor-pointer w-9 h-9 icon fill-sky-400"
+              <svg
+                v-show="loginInfo.loginWay !== 'phoneNumber'"
+                @click="changeLoginWay"
+                class="cursor-pointer w-9 h-9 icon fill-orange-400"
                 aria-hidden="true"
               >
-                <use xlink:href="#icon-account_sms"></use>
-              </svg> -->
+                <use xlink:href="#icon-phoneNumber"></use>
+              </svg>
             </div>
           </div>
         </form>
@@ -331,6 +333,8 @@ import {
   SendVerifyCode,
   verifyPhoneNumber,
   userRegister,
+  getWxQr,
+  getScanStatus,
 } from "@/request/api/auth";
 import { MessageCreator } from "@/components/message";
 
@@ -433,6 +437,7 @@ async function handleRegister() {
     registerRunning.value = true; // 节流处理
     // 验证码校验,校验未通过的会抛出错误从而中止执行
     await verifyPhoneNumber(
+      registerInfo.phoneNumber,
       phoneCodeInfo.verifyCode,
       phoneCodeInfo.verifyCodeTempKey
     );
@@ -458,7 +463,7 @@ async function handleRegister() {
 // 获取短信验证码
 const phoneCodeInfo = reactive({
   verifyCode: "",
-  verifyCodeTempKey: "1691253948454",
+  verifyCodeTempKey: "",
 });
 const verifyCodeBtn = reactive({
   disabled: false,
@@ -492,22 +497,45 @@ const loginInfo = reactive({
 });
 
 const message = new MessageCreator();
-
+const wxQrCodeInfo = reactive({
+  src: "/QRCode.png",
+  tempUserId: "",
+});
+// 200 成功登录 204 成功扫码 500 错误
 // 变换登录方式
 async function changeLoginWay() {
   if (loginInfo.loginWay === "password") {
     loginInfo.loginWay = "weChat";
-    // TODO:获取二维码SRC
-
-    // 开启扫码轮询判断登录状态
-    getScanState();
+    loginByWeChat();
   } else {
     loginInfo.loginWay = "password";
+    clearInterval(loginTimer);
   }
 }
 
-// TODO:微信登陆状态
-async function getScanState() {}
+let loginTimer = null;
+// 微信登录
+async function loginByWeChat() {
+  try {
+    // 获取二维码src
+    let { data } = await getWxQr();
+    wxQrCodeInfo.src = data?.data?.qrUrl;
+    wxQrCodeInfo.tempUserId = data?.data?.tempUserId;
+    // 轮询扫码状态
+    // TODO:500状态码未测试过,二维码有效时间
+    loginTimer = setInterval(async () => {
+      let { data } = await getScanStatus(wxQrCodeInfo.tempUserId);
+      if (data?.code === 200) {
+        clearInterval(loginTimer);
+        localStorage.setItem("token", data?.data?.token);
+        router.replace({ name: "home" });
+      }
+    }, 2000);
+  } catch {
+    clearInterval(loginTimer);
+    return;
+  }
+}
 
 //  提交登录信息
 async function handleLogin() {

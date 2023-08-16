@@ -16,16 +16,17 @@ export function SendVerifyCode(phoneNumber) {
 }
 /**
  * 验证短信验证码
+ * @param {Number}  phoneNumber - 电话号码
  * @param {Number} code - 用户输入的验证码
  * @param {String} tempKey - 短信验证临时标志
  * @returns 包含响应数据的Promise对象
  */
-export function verifyPhoneNumber(code,tempKey){
+export function verifyPhoneNumber(phoneNumber,code,tempKey){
     return service({
         method:'POST',
         url:'/user/verifyCode',
         data:{
-            code,tempKey
+            phoneNumber,code,tempKey
         }
     })
 }

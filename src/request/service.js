@@ -22,7 +22,9 @@ function createService(){
         (response) => { 
             const apiData = response.data;
             const {code,message} = apiData;
-            if(code !== 200){
+            if(code === 200 || code===204){
+                return response;
+            } else {
                 messageBox.present({
                     message,
                     msgType:'error',
@@ -30,7 +32,6 @@ function createService(){
                 })
                 throw new Error(message);
             }
-            return response;
         },
         (error) => {
             console.log(error);
