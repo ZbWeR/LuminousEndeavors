@@ -3,7 +3,7 @@ import { getToken,setToken } from './token'
 
 export default createStore({
   state: {
-    token: getToken() || '',
+    token: getToken() || 'This is a useless token',
   },
   getters: {
   },

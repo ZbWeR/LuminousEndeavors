@@ -29,6 +29,7 @@
       </div>
       <!-- 立即报名 -->
       <div
+        v-if="routeName != 'userCenter'"
         class="flex items-center gap-2 px-2 transition-all group shrink-0 text-zinc-400 lg:hover:-translate-y-1 lg:hover:scale-105"
       >
         <svg
@@ -37,7 +38,12 @@
         >
           <use xlink:href="#icon-zhuce"></use>
         </svg>
-        <button class="group-hover:text-sky-400" disabled>立即报名</button>
+        <button
+          @click="router.push({ name: 'userCenter' })"
+          class="group-hover:text-sky-400"
+        >
+          立即报名
+        </button>
       </div>
       <!-- 查看更多 -->
       <div
