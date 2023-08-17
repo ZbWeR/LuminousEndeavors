@@ -1,5 +1,6 @@
 <template>
   <!-- TODO:整体样式修改,白底 -->
+  <!-- TODO:考虑增加一个过渡动画 -->
   <div v-show="isScrollDown"><HomeNav></HomeNav></div>
 
   <div
@@ -12,10 +13,12 @@
       class="relative flex items-center justify-center w-full h-full"
       @wheel="handleScroll"
     >
+      <!-- TODO:loder -->
       <!-- 动态背景 -->
       <video
         src="../assets/bg.mp4"
         autoplay
+        preload
         muted
         disablepictureinpicture
         playsinline
@@ -53,6 +56,7 @@
         <!-- 按钮 -->
         <div class="flex justify-around w-1/2 my-3">
           <button
+            @click="router.push({ name: 'userCenter' })"
             class="font-serif hover:shadow-[5px_5px_4px_#79bbad] hover:-skew-x-12 box-border px-4 py-1 text-xl transition-all border border-zinc-400 text-zinc-400 hover:bg-teal-400 hover:border-none group-hover:text-white group-hover:border-white"
           >
             立即报名

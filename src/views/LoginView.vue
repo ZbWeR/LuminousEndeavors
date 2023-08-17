@@ -337,6 +337,10 @@ import {
   getScanStatus,
 } from "@/request/api/auth";
 import { MessageCreator } from "@/components/message";
+import { useMapMutations } from "@/utils/useVuex";
+
+// token相关
+const { updateToken } = useMapMutations(["updateToken"]);
 
 // 滑动切换样式相关
 const activeBlock = ref("login");
@@ -447,9 +451,9 @@ async function handleRegister() {
       gender: registerInfo.gender.value,
     });
     // 注册成功保存token
-    localStorage.setItem("token", data.data.token);
+    updateToken(data.data.token);
     // 跳转个人中心
-    router.replace({ name: "home" });
+    router.replace({ name: "userCenter" });
   } catch (err) {
     phoneCodeInfo.verifyCode = "";
     return;
@@ -527,8 +531,8 @@ async function loginByWeChat() {
       let { data } = await getScanStatus(wxQrCodeInfo.tempUserId);
       if (data?.code === 200) {
         clearInterval(loginTimer);
-        localStorage.setItem("token", data?.data?.token);
-        router.replace({ name: "home" });
+        updateToken(data?.data?.token);
+        router.replace({ name: "userCenter" });
       }
     }, 2000);
   } catch {
@@ -551,9 +555,9 @@ async function loginByPassWord() {
     LoginRunning.value = true;
     let { data } = await userLoginByPassword(loginInfo);
     // 登录成功保存token
-    localStorage.setItem("token", data.data.token);
+    updateToken(data?.data?.token);
     // 跳转个人中心
-    router.replace({ name: "home" });
+    router.replace({ name: "userCenter" });
   } catch {
     return;
   } finally {
