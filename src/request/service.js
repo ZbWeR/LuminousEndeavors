@@ -1,8 +1,30 @@
 import axios from "axios";
+import router from "@/router";
 import { MessageCreator } from "@/components/message";
 
+
+const messageBox = new MessageCreator();
+const showMessage = (text) =>{
+    messageBox.present({
+        message:text,
+        msgType:'error',
+        duration:2000
+    })
+}
+
+const errorHandle = (status,other) =>{
+    switch(status){
+        // 未登录或登录状态过期
+        case 401:
+            router.replace({ name: 'auth' });
+            showMessage('请先登录');
+            break;
+        default:
+            console.log(other);
+    }
+}
+
 function createService(){
-    const messageBox = new MessageCreator();
     const service = axios.create({
         baseURL: 'http://1.15.179.24:9520',
         timeout: 5000,
@@ -25,17 +47,16 @@ function createService(){
             if(code === 200 || code===204){
                 return response;
             } else {
-                messageBox.present({
-                    message,
-                    msgType:'error',
-                    duration:2000
-                })
+                showMessage(message);
                 throw new Error(message);
             }
         },
         (error) => {
-            console.log(error);
-            Promise.reject(error);
+            let {response} = error;
+            console.log(response);
+            errorHandle(response.status,response.statusText);
+            
+            return Promise.reject(response);
         }
     )
     return service;

@@ -1,12 +1,14 @@
 import { createStore } from 'vuex'
+import { getToken,setToken } from './token'
 
 export default createStore({
   state: {
-    token:'2333',
+    token: getToken() || '',
   },
   getters: {
   },
   mutations: {
+    updateToken:(state,newVal)=>{setToken(newVal);state.token = newVal},
   },
   actions: {
   },

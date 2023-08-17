@@ -95,6 +95,7 @@
 import HeadTopNav from "@/components/HeadTopNav.vue";
 import CopyRights from "@/components/CopyRights.vue";
 import { onMounted, reactive } from "vue";
+import { useMapState } from "@/utils/useVuex";
 import { getUserInfo, getSignInfo } from "@/request/api/info";
 
 const userState = reactive({
@@ -116,14 +117,18 @@ const userState = reactive({
 //     choice: "云计算",
 //   },
 
+const { token } = useMapState(["token"]);
 onMounted(async () => {
   try {
     // 页面鉴权
-    let token = localStorage.getItem("token");
-    let { data } = await getUserInfo(token);
+    let { data } = await getUserInfo(token.value);
     userState.baseInfo = data.data;
     // 获取报名信息
+    let res = await getSignInfo(token.value);
+    userState.signInfo = res.data.data;
+    console.log(res.data.data);
   } catch {
+    // console.log(2333);
     return;
   }
 });
