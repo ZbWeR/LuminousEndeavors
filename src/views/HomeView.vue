@@ -141,7 +141,7 @@
         <!-- 活动流程 -->
         <div class="w-full mt-10 text-white">
           <h1 class="font-mono lg:text-3xl -tracking-widest"># 活 动 流 程</h1>
-          <img src="../assets/111.png" alt="" />
+          <img src="../assets/graph.png" alt="" />
         </div>
         <!-- 版权与备案信息 -->
         <CopyRights></CopyRights>

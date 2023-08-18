@@ -4,7 +4,6 @@
       class="relative w-full h-full text-center transition-all duration-700 text-[#E7CD79]"
       id="card-box"
     >
-      <!-- bg-[url('../assets/tarot/card.jpg')] bg-no-repeat bg-cover -->
       <div
         class="border-[#E7CD79] absolute flex items-center justify-center w-full h-full bg-transparent border rounded-md backface-hidden"
       >
