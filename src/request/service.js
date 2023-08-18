@@ -27,7 +27,7 @@ const errorHandle = (status,other) =>{
 function createService(){
     const service = axios.create({
         baseURL: 'http://1.15.179.24:9520',
-        timeout: 5000,
+        timeout: 60000,
         headers: {
             "Accept":"*/*",
             "Content-Type": "application/json",
@@ -53,9 +53,8 @@ function createService(){
         },
         (error) => {
             let {response} = error;
-            console.log(response);
-            errorHandle(response.status,response.statusText);
-            
+            console.log(error);
+            errorHandle(response?.status,response?.statusText);
             return Promise.reject(response);
         }
     )

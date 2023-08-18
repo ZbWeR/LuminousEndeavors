@@ -19,7 +19,7 @@ export class MessageCreator {
         let msgOptions = {...options,index:this.queue.length+1};
         const myMessage = h(h(Message), msgOptions);
         let container = document.createElement('div');
-        container.classList.add('fixed','overflow-hidden','-translate-x-1/2','left-1/2','top-0');
+        container.classList.add('fixed','overflow-hidden','-translate-x-1/2','left-1/2','top-0','z-[9999]');
         render(myMessage, container);
         document.body.appendChild(container);
         

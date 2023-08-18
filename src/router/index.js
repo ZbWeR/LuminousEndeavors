@@ -1,6 +1,7 @@
 /* global process */
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import store from '@/store'
 
 const routes = [
   {
@@ -36,10 +37,10 @@ const routes = [
     name: 'userCenter',
     component: () => import(/* webpackChunkName: "more" */ '../views/UserCenter.vue'),
     // 登录状态判定
-    // beforeEnter: (to, from, next) => {
-    //   if (store.state.loginState == false) next({ name: 'Login' })
-    //   else next()
-    // }
+    beforeEnter: (to, from, next) => {
+      if (store.state.loginState == false) next({ name: 'auth' })
+      else next()
+    }
 
   }
 ]
