@@ -36,6 +36,7 @@
               v-model="loginInfo.password"
               placeholder="Password"
             />
+            <!-- TODO:忘记密码功能 -->
             <div class="relative w-full mt-3 cursor-pointer">
               <p
                 class="absolute right-0 inline-block text-sm transition-all border-b select-none border-slate-400 hover:text-black text-slate-400"
@@ -64,12 +65,8 @@
               alt=""
             />
           </div>
-          <!-- 手机验证码登录,废弃 -->
-          <div
-            hidden
-            class="w-1/2"
-            v-show="loginInfo.loginWay === 'phoneNumber'"
-          >
+          <!-- 手机验证码登录 -->
+          <div class="w-1/2" v-show="loginInfo.loginWay === 'phoneNumber'">
             <input
               class="block w-full px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow bg-sky-50"
               type="text"
@@ -88,12 +85,23 @@
               />
               <button
                 @click.prevent="getVerifyCode(loginInfo.userName)"
-                :disabled="verifyCodeBtn.disabled"
+                :disabled="!loginInfo.userName || verifyCodeBtn.disabled"
                 class="text-sm shrink-0 disabled:cursor-not-allowed disabled:text-slate-400"
               >
                 {{ verifyCodeBtn.content }}
               </button>
             </div>
+            <button
+              :disabled="
+                LoginRunning ||
+                loginInfo.userName === '' ||
+                phoneCodeInfo.verifyCode.length < 6
+              "
+              @click.prevent="handleLogin"
+              class="mx-auto mt-12 block disabled:bg-sky-200 disabled:cursor-not-allowed shadow-md box-border w-1/2 px-1 py-3 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400 disabled:hover:scale-100"
+            >
+              登录
+            </button>
           </div>
           <!-- 切换登录方式 -->
           <div class="w-3/5 mt-14">
@@ -106,7 +114,7 @@
               <!-- 微信登陆 -->
               <svg
                 v-show="loginInfo.loginWay !== 'weChat'"
-                @click="changeLoginWay"
+                @click="changeLoginWay('weChat')"
                 class="cursor-pointer w-9 h-9 icon fill-emerald-400"
                 title="微信"
                 aria-hidden="true"
@@ -116,7 +124,7 @@
               <!-- 账号密码登录 -->
               <svg
                 v-show="loginInfo.loginWay !== 'password'"
-                @click="changeLoginWay"
+                @click="changeLoginWay('password')"
                 class="cursor-pointer w-9 h-9 icon fill-sky-400"
                 aria-hidden="true"
               >
@@ -125,7 +133,7 @@
               <!-- 验证码登录 -->
               <svg
                 v-show="loginInfo.loginWay !== 'phoneNumber'"
-                @click="changeLoginWay"
+                @click="changeLoginWay('phoneNumber')"
                 class="cursor-pointer w-9 h-9 icon fill-orange-400"
                 aria-hidden="true"
               >
@@ -226,7 +234,7 @@
             class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
             type="text"
             placeholder="PhoneNumber"
-            @change="phoneNumberTest"
+            @change="phoneNumberTest(registerInfo.phoneNumber)"
             v-model="registerInfo.phoneNumber"
           />
           <!-- 验证码 -->
@@ -340,7 +348,10 @@ import { MessageCreator } from "@/components/message";
 import { useMapMutations } from "@/utils/useVuex";
 
 // token相关
-const { updateToken } = useMapMutations(["updateToken"]);
+const { updateToken, updateLoginState } = useMapMutations([
+  "updateToken",
+  "updateLoginState",
+]);
 
 // 滑动切换样式相关
 const activeBlock = ref("login");
@@ -383,9 +394,8 @@ function nickNameTest() {
   return false;
 }
 // 检查电话合法性
-function phoneNumberTest() {
+function phoneNumberTest(phoneNumber) {
   const regexPhone = /^((\+|00)86)?1\d{10}$/;
-  const { phoneNumber } = registerInfo;
   if (phoneNumber === "") {
     errorInput.message = "电话号码不能为空哦~";
   } else if (!regexPhone.test(phoneNumber)) {
@@ -419,11 +429,16 @@ const registerRunning = ref(false); // 节流
 
 import { useRouter } from "vue-router";
 const router = useRouter();
+
 // 提交注册信息
 async function handleRegister() {
   try {
     // 检验注册信息是否合法
-    if (!nickNameTest() || !passWordTest() || !phoneNumberTest()) {
+    if (
+      !nickNameTest() ||
+      !passWordTest() ||
+      !phoneNumberTest(registerInfo.phoneNumber)
+    ) {
       return;
     }
     // 校验注册信息是否填写完毕
@@ -452,6 +467,7 @@ async function handleRegister() {
     });
     // 注册成功保存token
     updateToken(data.data.token);
+    updateLoginState(true);
     // 跳转个人中心
     router.replace({ name: "userCenter" });
   } catch (err) {
@@ -467,14 +483,17 @@ async function handleRegister() {
 // 获取短信验证码
 const phoneCodeInfo = reactive({
   verifyCode: "",
-  verifyCodeTempKey: "",
+  verifyCodeTempKey: "1692496534217",
 });
 const verifyCodeBtn = reactive({
   disabled: false,
   content: "获取验证码",
 });
 async function getVerifyCode(phoneNumber) {
-  if (!phoneNumberTest()) return;
+  if (!phoneNumberTest(phoneNumber)) {
+    messageAlert("请输入正确的电话号码", "error");
+    return;
+  }
   let { data } = await SendVerifyCode(phoneNumber);
   phoneCodeInfo.verifyCodeTempKey = data.data;
 
@@ -495,24 +514,30 @@ async function getVerifyCode(phoneNumber) {
 const loginInfo = reactive({
   userName: "",
   password: "",
-  verifyCode: "",
-  verifyCodeTempKey: "",
   loginWay: "password",
 });
 
-const message = new MessageCreator();
+const messageInstance = new MessageCreator();
+function messageAlert(message, msgType) {
+  messageInstance.present({
+    message,
+    msgType,
+    duration: 2000,
+  });
+}
+
 const wxQrCodeInfo = reactive({
   src: "/QRCode.png",
   tempUserId: "",
 });
 // 200 成功登录 204 成功扫码 500 错误
 // 变换登录方式
-async function changeLoginWay() {
-  if (loginInfo.loginWay === "password") {
-    loginInfo.loginWay = "weChat";
+async function changeLoginWay(clickType) {
+  loginInfo.loginWay = clickType;
+  if (clickType === "weChat") {
+    // 开启扫码轮询
     loginByWeChat();
   } else {
-    loginInfo.loginWay = "password";
     clearInterval(loginTimer);
   }
 }
@@ -532,6 +557,7 @@ async function loginByWeChat() {
       if (data?.code === 200) {
         clearInterval(loginTimer);
         updateToken(data?.data?.token);
+        updateLoginState(true);
         router.replace({ name: "userCenter" });
       }
     }, 2000);
@@ -555,6 +581,7 @@ async function loginByPassWord() {
     LoginRunning.value = true;
     let { data } = await userLoginByPassword(loginInfo);
     // 登录成功保存token
+    updateLoginState(true);
     updateToken(data?.data?.token);
     // 跳转个人中心
     router.replace({ name: "userCenter" });
@@ -567,13 +594,19 @@ async function loginByPassWord() {
     }, 500);
   }
 }
-// 手机验证码登录：废弃
+// 手机验证码登录
 async function loginByPhoneNumber() {
   try {
-    await verifyPhoneNumber(
+    let { data } = await verifyPhoneNumber(
+      loginInfo.userName,
       phoneCodeInfo.verifyCode,
       phoneCodeInfo.verifyCodeTempKey
     );
+    console.log(data);
+    messageAlert("登陆成功", "success");
+    updateLoginState(true);
+    updateToken(data?.data);
+    router.replace({ name: "userCenter" });
   } catch {
     return;
   }
