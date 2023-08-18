@@ -53,8 +53,8 @@ function createService(){
         },
         (error) => {
             let {response} = error;
-            console.log(error);
-            errorHandle(response?.status,response?.statusText);
+            if(!response) showMessage(error.message);
+            else errorHandle(response?.status,response?.statusText);
             return Promise.reject(response);
         }
     )
