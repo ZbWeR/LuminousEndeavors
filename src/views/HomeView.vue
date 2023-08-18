@@ -188,7 +188,7 @@ const options = [
     abstract: "...",
   },
   {
-    project: "机器学习与AI",
+    project: "计算机视觉与机器学习",
     leader: "陈佳华",
     abstract: "...",
   },
