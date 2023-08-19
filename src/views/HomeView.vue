@@ -13,7 +13,7 @@
       class="relative flex items-center justify-center w-full h-full"
       @wheel="handleScroll"
     >
-      <!-- TODO:loder -->
+      <!-- TODO:loader -->
       <!-- 动态背景 -->
       <video
         src="../assets/bg.mp4"

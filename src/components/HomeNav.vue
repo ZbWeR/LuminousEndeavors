@@ -9,11 +9,13 @@
       </div>
       <div class="flex items-center h-full gap-4">
         <button
+          @click="$router.push({ name: 'userCenter' })"
           class="h-full px-4 transition-all hover:scale-110 hover:bg-teal-400"
         >
           立即报名
         </button>
         <button
+          @click="$router.push({ name: 'about' })"
           class="h-full px-4 transition-all hover:scale-110 hover:bg-teal-400"
         >
           查看方向

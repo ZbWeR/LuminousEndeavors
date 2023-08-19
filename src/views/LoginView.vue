@@ -456,7 +456,7 @@ async function handleRegister() {
     registerRunning.value = true; // 节流处理
     // 验证码校验,校验未通过的会抛出错误从而中止执行
     await verifyPhoneNumber(
-      registerInfo.phoneNumber,
+      // 不传入电话号码就是仅验证
       phoneCodeInfo.verifyCode,
       phoneCodeInfo.verifyCodeTempKey
     );
@@ -498,10 +498,10 @@ async function getVerifyCode(phoneNumber) {
   phoneCodeInfo.verifyCodeTempKey = data.data;
 
   let waitCodeSec = 60;
+  verifyCodeBtn.content = `${waitCodeSec}s 后重试`;
   verifyCodeBtn.disabled = true;
   let timer = setInterval(() => {
-    verifyCodeBtn.content = `${waitCodeSec}s 后重试`;
-    waitCodeSec--;
+    verifyCodeBtn.content = `${--waitCodeSec}s 后重试`;
     if (waitCodeSec < 0) {
       verifyCodeBtn.content = "获取验证码";
       verifyCodeBtn.disabled = false;
@@ -542,7 +542,7 @@ async function changeLoginWay(clickType) {
   }
 }
 
-let loginTimer = null;
+var loginTimer = null;
 // 微信登录
 async function loginByWeChat() {
   try {

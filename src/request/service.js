@@ -4,6 +4,10 @@ import { MessageCreator } from "@/components/message";
 
 
 const messageBox = new MessageCreator();
+/**
+ * 展示消息弹窗
+ * @param {String} text - 要显示的消息内容 
+ */
 const showMessage = (text) =>{
     messageBox.present({
         message:text,
@@ -11,7 +15,11 @@ const showMessage = (text) =>{
         duration:2000
     })
 }
-
+/**
+ * 异常状态码处理
+ * @param {Number} status - 状态码
+ * @param {String} other - 错误信息 
+ */
 const errorHandle = (status,other) =>{
     switch(status){
         // 未登录或登录状态过期
@@ -35,7 +43,6 @@ function createService(){
     });
     // 请求拦截
     service.interceptors.request.use(
-        // 获取 token
         (config) => config,
         (error) => Promise.reject(error)
     )
@@ -47,13 +54,16 @@ function createService(){
             if(code === 200 || code===204){
                 return response;
             } else {
+                // 自定状态码非20系显示错误信息
                 showMessage(message);
                 throw new Error(message);
             }
         },
         (error) => {
             let {response} = error;
+            // NetWork Error处理
             if(!response) showMessage(error.message);
+            // 其他错误处理
             else errorHandle(response?.status,response?.statusText);
             return Promise.reject(response);
         }
