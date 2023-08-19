@@ -21,12 +21,12 @@ export function SendVerifyCode(phoneNumber) {
  * @param {String} tempKey - 短信验证临时标志
  * @returns 包含响应数据的Promise对象
  */
-export function verifyPhoneNumber(phoneNumber,code,tempKey){
+export function verifyPhoneNumber(code,tempKey,phoneNumber){
     return service({
         method:'POST',
         url:'/user/verifyCode',
         data:{
-            phoneNumber,code,tempKey
+            code,tempKey,phoneNumber
         }
     })
 }
