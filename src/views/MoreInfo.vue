@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full bg-zinc-100">
+  <div
+    class="flex flex-col items-center justify-between w-screen min-h-screen bg-zinc-100"
+  >
     <!-- 标题栏 -->
     <HeadTopNav>更 多 信 息</HeadTopNav>
-    <div
-      class="h-72 w-4/5 p-4 mt-8 transition-all bg-white hover:scale-[1.02] lg:mx-auto"
-    >
+    <div class="w-4/5 p-4 mt-8 bg-white shadow-md h-72 lg:mx-auto">
       正文内容
     </div>
     <CopyRights></CopyRights>
