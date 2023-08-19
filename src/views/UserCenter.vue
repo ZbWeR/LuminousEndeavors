@@ -7,9 +7,7 @@
     <div class="flex flex-col items-center flex-1 w-4/5 mt-4 lg:mx-auto">
       <!-- 用户信息 -->
       <div
-        @click="showEditor = true"
-        v-show="showSignForm === false"
-        class="cursor-pointer duration-500 relative flex items-center justify-between w-1/2 gap-4 p-2 transition-all rounded-md shadow-md bg-gradient-to-r to-[#37ecba] from-[#72afd3] hover:scale-95"
+        class="bg-gradient-to-r to-[#37ecba] from-[#72afd3] relative flex items-center justify-between w-1/2 gap-4 p-2 transition-all duration-500 rounded-md hover:scale-[0.98] shadow-md cursor-pointer"
       >
         <!-- TODO:头像加载失败处理 -->
         <img
@@ -18,13 +16,15 @@
           class="rounded-full shadow-md w-28 shadow-black/25 aspect-square"
         />
         <div class="flex-1 text-white">
-          <p class="font-mono text-2xl font-bold tracking-wider">
+          <p class="px-2 py-1 font-mono text-2xl font-bold tracking-wider">
             {{ userState.baseInfo?.nickName }}
           </p>
           <div class="flex items-center mt-2">
-            <p>{{ userState.baseInfo?.phoneNumber || "绑定手机号" }}</p>
+            <p class="px-2 py-1">
+              {{ userState.baseInfo?.phoneNumber || "绑定手机号" }}
+            </p>
             <svg class="icon fill-white" aria-hidden="true">
-              <use xlink:href="#icon-xiugai"></use>
+              <use xlink:href="#icon-edit"></use>
             </svg>
           </div>
         </div>
@@ -198,11 +198,6 @@
         </form>
       </div>
     </div>
-    <!-- 修改信息弹窗 -->
-    <UserCenterEditor
-      v-show="showEditor"
-      :baseInfo="userState.baseInfo"
-    ></UserCenterEditor>
     <!-- 提交文件弹窗 -->
     <UploadFile
       v-show="showUploadFile"
@@ -217,9 +212,8 @@
 import HeadTopNav from "@/components/HeadTopNav.vue";
 import CopyRights from "@/components/CopyRights.vue";
 import UploadFile from "@/components/UploadFile.vue";
-import UserCenterEditor from "@/components/UserCenterEditor.vue";
 import { onMounted, reactive, ref } from "vue";
-import { useMapState } from "@/utils/useVuex";
+import { useMapState, useMapMutations } from "@/utils/useVuex";
 import {
   getUserInfo,
   getSignInfo,
@@ -234,11 +228,13 @@ const userState = reactive({
     phoneNumber: null,
     avatarUrl:
       "http://1.15.179.24:8001/api/file/7521341d-00b4-4431-8460-72c7182f7cf7.jpg",
+    gender: "无",
   },
   signInfo: null,
 });
 
 const { token } = useMapState(["token"]);
+const { updateToken } = useMapMutations(["useMapMutations"]);
 onMounted(async () => {
   try {
     // 页面鉴权
@@ -261,6 +257,11 @@ onMounted(async () => {
 });
 
 const messageInstance = new MessageCreator();
+/**
+ * 展示消息弹窗
+ * @param {String} message - 消息内容
+ * @param {String} msgType - 消息类型
+ */
 function messageAlert(message, msgType) {
   console.log(message, msgType);
   messageInstance.present({
@@ -280,7 +281,9 @@ const signInputInfo = reactive({
   choice: "",
   info: "",
 });
-
+/**
+ * 提交报名信息
+ */
 async function handleSign() {
   if (!validSignInfo()) return;
   try {
@@ -293,7 +296,9 @@ async function handleSign() {
       messageAlert("修改报名信息成功", "success");
     } else {
       // 未报名调用报名接口
-      await postSignInfo(token.value, completeInfo);
+      let { data } = await postSignInfo(token.value, completeInfo);
+      // 保存新的token TODO:未测试
+      updateToken(data?.data);
       messageAlert("报名成功", "success");
     }
     // 隐藏报名界面
