@@ -271,7 +271,6 @@ function messageAlert(message, msgType) {
   });
 }
 
-const showEditor = ref(false);
 const showSignForm = ref(false);
 const signInputInfo = reactive({
   name: "",
