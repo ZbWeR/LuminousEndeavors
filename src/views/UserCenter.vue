@@ -70,7 +70,9 @@
         </div>
         <div class="mt-2">
           <h1 class="text-slate-400">自我评价:</h1>
-          <p class="mt-1 indent-4">{{ userState.signInfo?.info }}</p>
+          <p class="mt-1 break-words indent-4">
+            {{ userState.signInfo?.info }}
+          </p>
         </div>
         <div class="flex justify-center gap-4 pt-4 mt-2 border-t">
           <button

@@ -598,11 +598,10 @@ async function loginByPassWord() {
 async function loginByPhoneNumber() {
   try {
     let { data } = await verifyPhoneNumber(
-      loginInfo.userName,
       phoneCodeInfo.verifyCode,
-      phoneCodeInfo.verifyCodeTempKey
+      phoneCodeInfo.verifyCodeTempKey,
+      loginInfo.userName
     );
-    console.log(data);
     messageAlert("登陆成功", "success");
     updateLoginState(true);
     updateToken(data?.data);
