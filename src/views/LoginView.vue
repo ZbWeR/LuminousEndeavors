@@ -39,6 +39,7 @@
             <!-- TODO:忘记密码功能 -->
             <div class="relative w-full mt-3 cursor-pointer">
               <p
+                @click="resetShow = true"
                 class="absolute right-0 inline-block text-sm transition-all border-b select-none border-slate-400 hover:text-black text-slate-400"
               >
                 忘记密码?
@@ -331,6 +332,11 @@
         </div>
       </div>
     </div>
+    <ResetPassword
+      v-show="resetShow"
+      @toggleShow="toggleShow"
+      @alert="messageAlert"
+    ></ResetPassword>
   </div>
 </template>
 
@@ -346,6 +352,7 @@ import {
 } from "@/request/api/auth";
 import { MessageCreator } from "@/components/message";
 import { useMapMutations } from "@/utils/useVuex";
+import ResetPassword from "@/components/ResetPassword.vue";
 
 // token相关
 const { updateToken, updateLoginState } = useMapMutations([
@@ -489,25 +496,29 @@ const verifyCodeBtn = reactive({
   disabled: false,
   content: "获取验证码",
 });
+
 async function getVerifyCode(phoneNumber) {
   if (!phoneNumberTest(phoneNumber)) {
     messageAlert("请输入正确的电话号码", "error");
     return;
   }
-  let { data } = await SendVerifyCode(phoneNumber);
-  phoneCodeInfo.verifyCodeTempKey = data.data;
-
-  let waitCodeSec = 60;
-  verifyCodeBtn.content = `${waitCodeSec}s 后重试`;
-  verifyCodeBtn.disabled = true;
-  let timer = setInterval(() => {
-    verifyCodeBtn.content = `${--waitCodeSec}s 后重试`;
-    if (waitCodeSec < 0) {
-      verifyCodeBtn.content = "获取验证码";
-      verifyCodeBtn.disabled = false;
-      clearInterval(timer);
-    }
-  }, 1000);
+  try {
+    let { data } = await SendVerifyCode(phoneNumber);
+    phoneCodeInfo.verifyCodeTempKey = data.data;
+    let waitCodeSec = 60;
+    verifyCodeBtn.content = `${waitCodeSec}s 后重试`;
+    verifyCodeBtn.disabled = true;
+    let timer = setInterval(() => {
+      verifyCodeBtn.content = `${--waitCodeSec}s 后重试`;
+      if (waitCodeSec < 0) {
+        verifyCodeBtn.content = "获取验证码";
+        verifyCodeBtn.disabled = false;
+        clearInterval(timer);
+      }
+    }, 1000);
+  } catch {
+    return;
+  }
 }
 
 // 登录信息对象
@@ -609,6 +620,12 @@ async function loginByPhoneNumber() {
   } catch {
     return;
   }
+}
+
+// 忘记密码显隐
+const resetShow = ref(false);
+function toggleShow() {
+  resetShow.value = !resetShow.value;
 }
 </script>
 

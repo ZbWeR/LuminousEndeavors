@@ -50,7 +50,7 @@ export function postSignInfo(token,data){
  * @param {*} token 
  * @returns 
  */
- export function updateSignInfo(token,data){
+export function updateSignInfo(token,data){
     return service({
         method: 'PUT',
         url:'/sign',
@@ -80,5 +80,22 @@ export function uploadFile(token, formData,handleProgress,signal) {
       onUploadProgress: ProgressEvent => {handleProgress(ProgressEvent)},
       signal
     });
-  }
-  
+}
+
+/**
+ * 重置用户信息
+ * @param {string} token - 身份校验
+ * @param {string} phoneNumber - 电话号码
+ * @param {string} password - 密码
+ * @returns 
+ */
+export function resetUserInfo(token,phoneNumber,password){
+    return service({
+        method:'POST',
+        url:'/user/updateUser',
+        headers: {
+            Authorization: token,
+            },
+        data:{phoneNumber,password}
+    })
+}
