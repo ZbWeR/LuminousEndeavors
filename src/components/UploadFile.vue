@@ -134,6 +134,9 @@ async function runUpload() {
 
     emit("alert", "上传成功!", "success");
     emit("changeVis");
+
+    uploadBtn.value = "";
+    fileName.value = "";
     loading.value = 0;
   } catch {
     return;

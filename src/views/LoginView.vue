@@ -15,9 +15,9 @@
           class="flex flex-col items-center justify-center w-full h-full"
         >
           <h1
-            class="mb-16 font-mono text-4xl font-bold tracking-widest text-center"
+            class="mb-16 font-sans text-4xl font-bold tracking-widest text-center"
           >
-            Log In
+            登 录
           </h1>
           <!-- 账号密码登录 -->
           <div
@@ -157,9 +157,9 @@
           class="flex flex-col items-center justify-center w-full h-full transition-all"
         >
           <h1
-            class="mb-16 font-mono text-4xl font-bold tracking-widest text-center"
+            class="mb-16 font-sans text-4xl font-bold tracking-widest text-center"
           >
-            Sign Up
+            注 册
           </h1>
           <!-- 用户名 -->
           <input
@@ -245,7 +245,7 @@
           >
             <input
               :class="phoneCodeInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
-              class="flex-1 tracking-wider outline-none placeholder:text-sm"
+              class="flex-1 w-0 tracking-wider outline-none placeholder:text-sm"
               type="text"
               v-model="phoneCodeInfo.verifyCode"
               placeholder="请输入验证码..."
@@ -301,15 +301,15 @@
           "
           class="flex flex-col items-center justify-center transition-all duration-1000"
         >
-          <h1 class="font-sans text-xl font-bold tracking-wider">
-            ✨Welcome Back!✨
+          <h1 class="font-sans font-bold tracking-wider lg:text-xl">
+            🎉欢迎来到光点计划🚀
           </h1>
-          <img class="w-1/2 mt-6" src="../assets/register.png" alt="" />
+          <img class="w-1/2 mt-6" src="../assets/logo.png" alt="" />
           <p class="mt-6 text-sm select-none text-slate-400">
             已有账号？<span
-              class="cursor-pointer text-sky-400"
+              class="text-base cursor-pointer text-sky-400"
               @click="activeBlock = 'login'"
-              >快去登录吧！</span
+              >点击登录！</span
             >
           </p>
         </div>
@@ -318,13 +318,13 @@
           :class="activeBlock === 'login' ? '' : 'opacity-0 invisible absolute'"
           class="flex flex-col items-center justify-center transition-all duration-1000"
         >
-          <h1 class="font-sans text-xl font-bold tracking-wider">
-            🎉欢迎来到光点计划🚀
+          <h1 class="font-sans font-bold tracking-wider lg:text-xl">
+            ✨Welcome Back!✨
           </h1>
-          <img class="w-1/2 mt-6" src="../assets/logo.png" alt="" />
+          <img class="w-1/2 mt-6" src="../assets/register.png" alt="" />
           <p class="mt-6 text-sm select-none text-slate-400">
             没有账号？<span
-              class="cursor-pointer text-sky-400"
+              class="text-base cursor-pointer text-sky-400"
               @click="activeBlock = 'register'"
               >点击注册！</span
             >
@@ -361,7 +361,7 @@ const { updateToken, updateLoginState } = useMapMutations([
 ]);
 
 // 滑动切换样式相关
-const activeBlock = ref("login");
+const activeBlock = ref("register");
 
 // 注册非法输入提示信息
 const errorInput = reactive({
