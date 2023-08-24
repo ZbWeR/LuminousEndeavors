@@ -16,9 +16,9 @@ export function SendVerifyCode(phoneNumber) {
 }
 /**
  * 验证短信验证码
- * @param {Number}  phoneNumber - 电话号码
  * @param {Number} code - 用户输入的验证码
  * @param {String} tempKey - 短信验证临时标志
+ * @param {Number}  phoneNumber - 电话号码
  * @returns 包含响应数据的Promise对象
  */
 export function verifyPhoneNumber(code,tempKey,phoneNumber){
