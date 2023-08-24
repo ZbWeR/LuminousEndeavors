@@ -234,7 +234,7 @@ const userState = reactive({
 });
 
 const { token } = useMapState(["token"]);
-const { updateToken } = useMapMutations(["useMapMutations"]);
+const { updateToken } = useMapMutations(["updateToken"]);
 onMounted(async () => {
   try {
     // 页面鉴权
@@ -296,7 +296,7 @@ async function handleSign() {
     } else {
       // 未报名调用报名接口
       let { data } = await postSignInfo(token.value, completeInfo);
-      // 保存新的token TODO:未测试
+      // 保存新的token
       updateToken(data?.data);
       messageAlert("报名成功", "success");
     }
