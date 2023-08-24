@@ -3,11 +3,10 @@
     <!-- 标题栏 -->
     <HeadTopNav>个 人 中 心</HeadTopNav>
 
-    <!-- TODO:点击显示修改个人信息 -->
     <div class="flex flex-col items-center flex-1 w-4/5 mt-4 lg:mx-auto">
       <!-- 用户信息 -->
       <div
-        class="bg-gradient-to-r to-[#37ecba] from-[#72afd3] relative flex items-center justify-between w-1/2 gap-4 p-2 transition-all duration-500 rounded-md hover:scale-[0.98] shadow-md cursor-pointer"
+        class="bg-gradient-to-r to-[#37ecba] from-[#72afd3] relative flex items-center justify-between w-1/2 gap-4 p-2 transition-all duration-500 rounded-md hover:scale-[0.98] shadow-md"
       >
         <!-- TODO:头像加载失败处理 -->
         <img
@@ -19,7 +18,10 @@
           <p class="px-2 py-1 font-mono text-2xl font-bold tracking-wider">
             {{ userState.baseInfo?.nickName }}
           </p>
-          <div class="flex items-center mt-2">
+          <div
+            class="flex items-center mt-2 cursor-pointer"
+            @click="toggleShow"
+          >
             <p class="px-2 py-1">
               {{ userState.baseInfo?.phoneNumber || "绑定手机号" }}
             </p>
@@ -28,12 +30,17 @@
             </svg>
           </div>
         </div>
-
-        <div class="absolute top-0 right-0 flex w-1/4 mt-3 justify-evenly">
-          <p class="w-4 h-4 bg-red-400 rounded-full"></p>
-          <p class="w-4 h-4 bg-yellow-400 rounded-full"></p>
-          <p class="w-4 h-4 rounded-full bg-sky-400"></p>
-        </div>
+        <button
+          @click="
+            {
+              $router.replace({ name: 'auth' });
+              removeToken();
+            }
+          "
+          class="absolute flex items-center justify-center w-8 h-8 font-bold text-red-500 bg-white rounded-full top-4 right-4"
+        >
+          X
+        </button>
       </div>
       <!-- 报名信息(已报名) -->
       <div
@@ -204,6 +211,15 @@
       @alert="messageAlert"
       @changeVis="showUploadFile = false"
     ></UploadFile>
+    <ResetPassword
+      fun-type="phone"
+      :has-phone="userState.baseInfo?.phoneNumber"
+      @toggleShow="toggleShow"
+      @alert="messageAlert"
+      @updateToken="updateToken"
+      v-show="resetShow"
+      :token="token"
+    ></ResetPassword>
     <CopyRights></CopyRights>
   </div>
 </template>
@@ -212,6 +228,7 @@
 import HeadTopNav from "@/components/HeadTopNav.vue";
 import CopyRights from "@/components/CopyRights.vue";
 import UploadFile from "@/components/UploadFile.vue";
+import ResetPassword from "@/components/ResetPassword.vue";
 import { onMounted, reactive, ref } from "vue";
 import { useMapState, useMapMutations } from "@/utils/useVuex";
 import {
@@ -221,6 +238,7 @@ import {
   updateSignInfo,
 } from "@/request/api/info";
 import { MessageCreator } from "@/components/message";
+import { removeToken } from "@/store/token";
 
 const userState = reactive({
   baseInfo: {
@@ -234,7 +252,10 @@ const userState = reactive({
 });
 
 const { token } = useMapState(["token"]);
-const { updateToken } = useMapMutations(["updateToken"]);
+const { updateToken, quitLogin } = useMapMutations([
+  "updateToken",
+  "quitLogin",
+]);
 onMounted(async () => {
   try {
     // 页面鉴权
@@ -341,5 +362,12 @@ function computedGrade() {
   }
 }
 
-const showUploadFile = ref(false);
+const showUploadFile = ref(false); // 控制上传文件显示
+// 控制重置密码/绑定手机显示
+const resetShow = ref(false);
+function toggleShow(e, phone = -1) {
+  console.log(phone);
+  if (phone !== -1) userState.baseInfo.phoneNumber = phone;
+  resetShow.value = !resetShow.value;
+}
 </script>

@@ -1,5 +1,5 @@
 import { createStore } from 'vuex'
-import { getToken,setToken } from './token'
+import { getToken,setToken,removeToken } from './token'
 
 export default createStore({
   state: {
@@ -11,6 +11,7 @@ export default createStore({
   mutations: {
     updateToken:(state,newVal)=>{setToken(newVal);state.token = newVal},
     updateLoginState:(state,newVal) => state.loginState = newVal,
+    quitLogin:(state) => {removeToken();state.loginState = false}
   },
   actions: {
   },
