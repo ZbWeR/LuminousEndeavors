@@ -84,7 +84,7 @@
         <div class="flex justify-center gap-4 pt-4 mt-2 border-t">
           <button
             @click="showSignForm = true"
-            class="block px-3 py-2 text-white transition-all bg-orange-400 rounded-md hover:scale-95 hover:bg-orange-500"
+            class="hidden px-3 py-2 text-white transition-all bg-orange-400 rounded-md hover:scale-95 hover:bg-orange-500"
           >
             修改信息
           </button>
