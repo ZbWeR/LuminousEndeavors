@@ -30,6 +30,7 @@
             </svg>
           </div>
         </div>
+        <!-- 退出登录 -->
         <button
           @click="
             {
@@ -252,10 +253,7 @@ const userState = reactive({
 });
 
 const { token } = useMapState(["token"]);
-const { updateToken, quitLogin } = useMapMutations([
-  "updateToken",
-  "quitLogin",
-]);
+const { updateToken } = useMapMutations(["updateToken"]);
 onMounted(async () => {
   try {
     // 页面鉴权
