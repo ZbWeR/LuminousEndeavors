@@ -1,7 +1,7 @@
 <template>
   <!-- 标题栏 -->
   <div
-    class="container flex items-center justify-between pt-12 pb-2 mx-auto font-serif border-b-2 border-blue-400"
+    class="flex items-center justify-between w-4/5 pt-12 pb-2 mx-auto font-serif border-b-2 border-blue-400"
   >
     <!-- 标题 -->
     <h1 class="flex items-center w-full tracking-widest lg:text-3xl">

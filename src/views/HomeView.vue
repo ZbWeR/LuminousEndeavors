@@ -73,7 +73,7 @@
     </div>
     <!-- 主体内容 -->
     <div class="w-full pt-20 bg-slate-800" ref="mainContent">
-      <div class="container mx-auto">
+      <div class="w-4/5 mx-auto">
         <!-- 活动介绍 -->
         <div
           class="p-3 text-white rounded bg-gradient-to-r to-[#37ecba] from-[#72afd3]"
