@@ -655,18 +655,18 @@ function toggleShow() {
 }
 
 .circleSwitchRight {
-  width: 200px;
-  height: 200px;
-  top: -100px;
-  right: -100px;
+  width: 180px;
+  height: 180px;
+  top: -90px;
+  right: -90px;
   box-shadow: inset 6px 2px 4px rgba(0, 0, 0, 0.2),
     inset -3px -3px 6px rgba(220, 220, 220, 0.8);
 }
 .circleSwitchLeft {
-  width: 300px;
-  height: 300px;
-  bottom: -150px;
-  left: -150px;
+  width: 220px;
+  height: 220px;
+  bottom: -110px;
+  left: -110px;
   box-shadow: inset -4px 2px 4px rgba(0, 0, 0, 0.2),
     inset -3px -3px 6px rgba(220, 220, 220, 0.8);
 }
