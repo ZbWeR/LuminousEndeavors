@@ -1,12 +1,14 @@
 <template>
   <!-- 标题栏 -->
   <div
-    class="flex items-center justify-between w-4/5 pt-12 pb-2 mx-auto font-serif border-b-2 border-blue-400"
+    class="flex items-center justify-between w-4/5 pt-12 pb-2 mx-auto border-b-2 border-blue-400"
   >
     <!-- 标题 -->
-    <h1 class="flex items-center w-full tracking-widest lg:text-3xl">
+    <h1
+      class="flex items-center w-full text-2xl font-bold tracking-widest lg:text-3xl"
+    >
       关于光点计划
-      <span class="inline-block w-24 h-0.5 mx-5 bg-black"></span> <slot></slot>
+      <span class="inline-block w-24 h-1 mx-5 bg-black"></span> <slot></slot>
     </h1>
 
     <div class="flex shrink-0">
