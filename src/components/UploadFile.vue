@@ -88,13 +88,13 @@ function handleUpload() {
 function getFileInfo(e) {
   const { target } = e;
   if (target?.files?.length === 0) return;
-  const { name, size, type } = target.files[0];
+  const { name, size } = target.files[0];
   if (size > 150 * 1024 * 1024) {
     emit("alert", "文件太大啦!", "error");
     return;
   }
   let fileNameType = name.split(".")[1];
-  if (fileNameType !== "zip" || type !== "application/x-zip-compressed") {
+  if (fileNameType !== "zip") {
     emit("alert", "文件格式只能为zip", "error");
     return;
   }
