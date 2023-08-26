@@ -128,25 +128,16 @@
           </div>
           <!-- 活动介绍 & logo-->
           <div class="flex flex-col items-center justify-between w-1/3">
-            <h1 class="font-sans text-4xl">/* 开源项目主题活动 */</h1>
+            <h1 class="font-sans text-2xl xl:text-3xl 2xl:text-4xl">
+              /* 开源项目主题活动 */
+            </h1>
 
             <!-- 活动介绍 -->
             <div
               class="transition-all duration-500 overflow-hidden cursor-pointer h-fit w-full max-h-96 p-3 text-white rounded-lg bg-gradient-to-br to-[#5dd589] from-[#87cefa] shadow"
-              @click="introduceShow = !introduceShow"
-              :class="introduceShow ? 'max-h-96' : 'max-h-14'"
             >
-              <div class="flex items-center justify-between h-8">
-                <h1 class="text-2xl">🎨 活动介绍</h1>
-                <p>
-                  {{ introduceShow ? "收起▲" : "展开▼" }}
-                </p>
-              </div>
-
-              <p
-                class="mt-1 overflow-hidden text-base tracking-wider indent-4"
-                :class="introduceShow ? 'h-fit' : 'h-0'"
-              >
+              <h1 class="h-8 text-2xl">🎨 活动介绍</h1>
+              <p class="mt-1 overflow-hidden text-base tracking-wider indent-4">
                 为响应创新工坊有关开源项目活动号召、强化同学们面向计算机基础与底层架构的知识，<span
                   class="text-lg font-semibold text-slate-800"
                   >微光</span
@@ -158,17 +149,22 @@
               </p>
             </div>
             <!-- logo -->
-            <div class="flex items-center justify-center">
-              <img src="../assets/wei-logo1.png" class="h-36" alt="" />
-              <img src="../assets/yilu-logo.png" class="h-36" />
+            <div class="flex flex-col items-center justify-center 2xl:flex-row">
+              <img
+                src="../assets/yilu-logo.png"
+                class="h-28 xl:h-32 2xl:h-36"
+              />
+              <img
+                src="../assets/wei-logo1.png"
+                class="h-28 xl:h-32 2xl:h-36"
+                alt=""
+              />
             </div>
           </div>
         </section>
 
         <!-- 开设方向 -->
-        <div
-          class="w-full p-8 mt-10 font-black bg-white rounded-lg shadow text-slate-950"
-        >
+        <div class="w-full p-8 mt-10 bg-white rounded-lg shadow text-slate-950">
           <h1
             class="font-mono lg:text-3xl -tracking-widest"
             style="font-weight: bolder"
@@ -196,7 +192,11 @@
           >
             # 活 动 流 程
           </h1>
-          <img src="../assets/graph3.png" alt="" />
+          <img
+            class="w-full mx-auto xl:w-4/5"
+            src="../assets/graph3.png"
+            alt=""
+          />
         </div>
         <!-- 版权与备案信息 -->
         <CopyRights></CopyRights>
@@ -287,8 +287,6 @@ function controlHeadNav(e) {
   isScrollDown.value = scrollTop > oldScroll;
   oldScroll = scrollTop;
 }
-// 显示隐藏
-var introduceShow = ref(true);
 </script>
 
 <style lang="less" scoped>
