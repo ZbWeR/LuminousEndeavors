@@ -73,7 +73,7 @@ import { ref } from "vue";
 import { useMapState } from "@/utils/useVuex";
 import { uploadFile } from "@/request/api/info";
 
-const emit = defineEmits(["alert", "changeVis"]);
+const emit = defineEmits(["alert", "changeVis", "refreshInfo"]);
 const { token } = useMapState(["token"]);
 
 const uploadBtn = ref(null);
@@ -133,6 +133,7 @@ async function runUpload() {
     await uploadFile(token.value, fileData, handleProgress, controller.signal);
 
     emit("alert", "上传成功!", "success");
+    emit("refreshInfo");
     emit("changeVis");
 
     uploadBtn.value = "";

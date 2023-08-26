@@ -60,7 +60,20 @@ export function updateSignInfo(token,data){
         data
     })
 }
-
+/**
+ * 获取用户提交的文件信息
+ * @param {*} token 
+ * @returns 
+ */
+export function getFileInfo(token){
+    return service({
+        method:'GET',
+        url:'/userFiles/submitFile',
+        headers:{
+            Authorization:token
+        }
+    })
+}
 
 /**
  * 提交文件
