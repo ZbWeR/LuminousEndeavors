@@ -72,80 +72,113 @@
       </div>
     </div>
     <!-- 主体内容 -->
-    <div class="w-full pt-20 relative main-bg" ref="mainContent">
+    <div class="relative w-full pt-20 main-bg" ref="mainContent">
       <div class="w-4/5 mx-auto">
         <!-- 活动介绍&参与获得 -->
-        <section class="flex relative" >
-          <!-- 你将参与 -->
-        <div style="background-color: #fff;"
-          class="w-3/4  overflow-hidden rounded-lg shadow "
-        >
-          
-          <div class=" p-3">
-            <h1 class="text-2xl">🚀 你将参与</h1>
-            <ul class="mt-1 ml-4">
-              <li
-                class="leading-loose tracking-widest list-none indent-1"
-                v-for="(item, index) in missionsText"
-                :key="index"
+        <section class="relative flex justify-between">
+          <!-- 活动内容 -->
+          <div
+            style="background-color: #fff"
+            class="w-3/5 overflow-hidden rounded-lg shadow"
+          >
+            <!-- 你将参与 -->
+            <div class="p-3">
+              <h1 class="text-2xl">🚀 你将参与</h1>
+              <ul class="mt-1 ml-4">
+                <li
+                  class="leading-loose tracking-widest list-none indent-1"
+                  v-for="(item, index) in missionsText"
+                  :key="index"
+                >
+                  <span
+                    class="inline-block w-2 h-2 mr-1 rounded-full bg-sky-500"
+                  ></span>
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+            <!-- 分隔符 -->
+            <div class="flex justify-center">
+              <div
+                class="inline-block w-2 h-2 my-2 bg-teal-400 rounded-lg"
+              ></div>
+              <div
+                class="inline-block w-4/5 h-2 mx-4 my-2 bg-teal-400 rounded-lg"
+              ></div>
+              <div
+                class="inline-block w-2 h-2 my-2 bg-teal-400 rounded-lg"
+              ></div>
+            </div>
+            <!-- 你将获得 -->
+            <div class="p-3">
+              <h1 class="text-2xl">🎯 你将获得</h1>
+              <ul class="mt-1 ml-4">
+                <li
+                  class="leading-loose tracking-widest list-none indent-1"
+                  v-for="(item, index) in advantages"
+                  :key="index"
+                >
+                  <span
+                    class="inline-block w-2 h-2 mr-1 rounded-full bg-sky-500"
+                  ></span>
+                  {{ item }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- 活动介绍 & logo-->
+          <div class="flex flex-col items-center justify-between w-1/3">
+            <h1 class="font-sans text-4xl">/* 开源项目主题活动 */</h1>
+
+            <!-- 活动介绍 -->
+            <div
+              class="transition-all duration-500 overflow-hidden cursor-pointer h-fit w-full max-h-96 p-3 text-white rounded-lg bg-gradient-to-br to-[#5dd589] from-[#87cefa] shadow"
+              @click="introduceShow = !introduceShow"
+              :class="introduceShow ? 'max-h-96' : 'max-h-14'"
+            >
+              <div class="flex items-center justify-between h-8">
+                <h1 class="text-2xl">🎨 活动介绍</h1>
+                <p>
+                  {{ introduceShow ? "收起▲" : "展开▼" }}
+                </p>
+              </div>
+
+              <p
+                class="mt-1 overflow-hidden text-base tracking-wider indent-4"
+                :class="introduceShow ? 'h-fit' : 'h-0'"
               >
-                <span
-                  class="inline-block w-2 h-2 mr-1 rounded-full bg-sky-500"
-                ></span>
-                {{ item }}
-              </li>
-            </ul>
+                为响应创新工坊有关开源项目活动号召、强化同学们面向计算机基础与底层架构的知识，<span
+                  class="text-lg font-semibold text-slate-800"
+                  >微光</span
+                >工作室携手<span class="text-lg font-semibold text-slate-800"
+                  >一路</span
+                >工作室，联合各方向实力强悍的学长学姐推出<b class="text-lg"
+                  >「光点计划」</b
+                >开源主题项目实践活动，面向全院邀请有志于学习计算机基础与底层关键技术、渴望参与实验式实践学习、希望收获项目经验的同学们开放多方向的实践项目，并在知识学习、项目构思和代码实现等方面提供全方位指导。
+              </p>
+            </div>
+            <!-- logo -->
+            <div class="flex items-center justify-center">
+              <img src="../assets/wei-logo1.png" class="h-36" alt="" />
+              <img src="../assets/yilu-logo.png" class="h-36" />
+            </div>
           </div>
-          <!-- 分隔符 -->
-          <div class="flex justify-center">
-            <div class=" inline-block w-2 h-2 my-2 rounded-lg bg-teal-400"></div>
-            <div class=" inline-block w-4/5 h-2 mx-4 my-2 rounded-lg bg-teal-400"></div>
-            <div class=" inline-block w-2 h-2 my-2 rounded-lg bg-teal-400"></div>
-          </div>
-          <!-- 你将获得 -->
-          <div class=" p-3">
-            <h1 class="text-2xl">🎯 你将获得</h1>
-            <ul class="mt-1 ml-4">
-              <li
-                class="leading-loose tracking-widest list-none indent-1"
-                v-for="(item, index) in advantages"
-                :key="index"
-              >
-                <span
-                  class="inline-block w-2 h-2 mr-1 rounded-full bg-sky-500"
-                ></span>
-                {{ item }}
-              </li>
-            </ul>
-          </div>
-        </div>
-          <!-- 活动介绍 -->
-          <div style="transition: all 0.3s ease-in-out;"
-          class="cursor-pointer w-2/5 h-1/2 ml-20 p-3 text-white rounded-lg bg-gradient-to-br to-[#a6e4e0] from-[#42b8aa] shadow"
-          :class="{show :vshow}" id="p-show"  @click="show($event)"
-        >
-          <p class="float-right " id="change" >收起▲</p>
-          <h1 class="text-2xl "  >🎨 活动介绍</h1>
-          <p class="mt-1 indent-12 tracking-wider text-base" >
-            为响应创新工坊有关开源项目活动号召、强化同学们面向计算机基础与底层架构的知识，<span
-              class="text-lg text-slate-800 font-semibold"
-              >微光</span
-            >工作室携手<span class="text-lg text-slate-800 font-semibold">一路</span
-            >工作室，联合各方向实力强悍的学长学姐推出<b class="text-lg"
-              >「光点计划」</b
-            >开源主题项目实践活动，面向全院邀请有志于学习计算机基础与底层关键技术、渴望参与实验式实践学习、希望收获项目经验的同学们开放多方向的实践项目，并在知识学习、项目构思和代码实现等方面提供全方位指导。
-          </p>
-        </div>
-        <!-- logo -->
-        <img src="../assets/wei-logo1.png" class="absolute bottom-24  h-1/4 w-1/4 mb-2" alt="" style="right: 3rem;">
-        <img src="../assets/yilu-logo.png" class="absolute bottom-2  w-1/5" alt="" style="height: 30%;right: 4.5rem;">
-  
         </section>
-        
+
         <!-- 开设方向 -->
-        <div class="w-full mt-10 text-slate-950 font-black bg-white p-8 rounded-lg  shadow">
-          <h1 class="font-mono lg:text-3xl -tracking-widest " style="font-weight: bolder;" ># 开 设 方 向</h1>
-          <div class="flex justify-around w-full h-56 gap-5 mx-auto mt-5 border-l-4 " style="border-color: #0ea5e9;">
+        <div
+          class="w-full p-8 mt-10 font-black bg-white rounded-lg shadow text-slate-950"
+        >
+          <h1
+            class="font-mono lg:text-3xl -tracking-widest"
+            style="font-weight: bolder"
+          >
+            # 开 设 方 向
+          </h1>
+          <div
+            class="flex justify-around w-full h-56 gap-5 mx-auto mt-5"
+            style="border-color: #0ea5e9"
+          >
             <FlipCards
               @click="$router.push({ name: 'about' })"
               class="w-[15%] cursor-pointer"
@@ -156,8 +189,13 @@
           </div>
         </div>
         <!-- 活动流程 -->
-        <div class="w-full mt-10 text-black">
-          <h1 class="font-mono lg:text-3xl -tracking-widest" style="font-weight: bolder;"># 活 动 流 程</h1>
+        <div class="w-full pl-8 pr-8 mt-10 text-black">
+          <h1
+            class="font-mono font-bold lg:text-3xl -tracking-widest"
+            style="font-weight: bolder"
+          >
+            # 活 动 流 程
+          </h1>
           <img src="../assets/graph3.png" alt="" />
         </div>
         <!-- 版权与备案信息 -->
@@ -173,7 +211,6 @@ import CopyRights from "@/components/CopyRights.vue";
 import HomeNav from "@/components/HomeNav.vue";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-
 
 const router = useRouter();
 
@@ -222,7 +259,7 @@ const options = [
   {
     project: "操作系统",
     leader: "李佳轩",
-    abstract: 
+    abstract:
       "说到操作系统，不知道大家对挂在嘴边的windows是否有所了解，它就是我们最广为熟知操作系统。操作系统是计算机系统中至关重要的组成部分，负责管理计算机的各种资源，以及协调不同程序之间的执行，就连你目前查看我们官网的硬件屏幕也离不开操作系统的管理。",
   },
 ];
@@ -251,29 +288,10 @@ function controlHeadNav(e) {
   oldScroll = scrollTop;
 }
 // 显示隐藏
-var vshow=true;
-
- function show(){
-  var pshow =document.querySelector("#p-show")
-  var change=document.querySelector("#change")
-  if(vshow==true){
-    pshow.classList.remove('show')
-    pshow.classList.add('hid')
-    change.innerHTML="展开▼"
-    vshow=false;
-  }
-  else{
-    pshow.classList.remove('hid')
-    pshow.classList.add('show')
-    change.innerHTML="收起▲"
-    vshow=true;
-  }
- }
-
+var introduceShow = ref(true);
 </script>
 
 <style lang="less" scoped>
-
 .time-title {
   -webkit-text-stroke: 2px;
   -webkit-text-stroke-color: #fff;
@@ -281,25 +299,20 @@ var vshow=true;
 .group:hover .time-title {
   text-shadow: 6px 6px #42b8aa;
 }
-.hid {
-  height: 52px;
-  overflow: hidden;
-}
-.show{
-  height: 280px;
-}
-.main-bg{
+
+.main-bg {
   background-repeat: no-repeat;
   background-position: center -187px;
   background-size: 100% 50%;
   background-color: #f2f3f5;
 }
-.shadow{
-  box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px, rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
+.shadow {
+  box-shadow: rgba(136, 165, 191, 0.48) 6px 2px 16px 0px,
+    rgba(255, 255, 255, 0.8) -6px -2px 16px 0px;
   transition: all 0.1s ease-in;
 }
-.shadow:hover{
-  transform: translate3d(0,0,0);
+.shadow:hover {
+  transform: translate3d(0, 0, 0);
   scale: 1.01;
 }
 </style>
