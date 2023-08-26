@@ -1,19 +1,19 @@
 <template>
   <div class="h-full overflow-hidden" id="flip-cards-root-box">
     <div
-      class="relative w-full h-full text-center transition-all duration-700 text-[#E7CD79]"
+      class="relative w-full h-full text-center transition-all duration-700 text-[#2dd4bf]"
       id="card-box"
     >
       <div
-        class="border-[#E7CD79] absolute flex items-center justify-center w-full h-full bg-transparent border rounded-md backface-hidden"
+        class="border-2 border-[#0ea5e9] absolute flex items-center justify-center w-full h-full bg-transparent rounded-md backface-hidden"
       >
-        <p class="text-lg">{{ cardContent.project }}</p>
+        <p class="text-xl">{{ cardContent.project }}</p>
       </div>
-      <div
-        class="absolute w-full h-full bg-[#E7CD79] text-slate-800 border border-[#E7CD79] rounded rotateY-180 backface-hidden"
+      <div style="background-color: rgba(123,214,207,0.9)"
+        class="absolute w-full h-full bg-[#97e6de] text-white border border-[#86d6cf] rounded rotateY-180 backface-hidden"
       >
-        <p class="my-5 text-lg text-center">{{ cardContent.leader }}</p>
-        <p class="px-2 text-sm break-all line-clamp-6">
+        <p class="my-5 text-2xl text-center">{{ cardContent.leader }}</p>
+        <p class="px-2 text-base break-all line-clamp-6">
           {{ cardContent.abstract }}
         </p>
       </div>
