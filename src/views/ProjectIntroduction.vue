@@ -3,7 +3,9 @@
     <!-- 标题栏 -->
     <HeadTopNav>方 向 介 绍</HeadTopNav>
     <!-- 导航栏 -->
-    <div class="fixed w-32 text-sm lg:left-10 text-slate-400">
+    <div
+      class="fixed w-32 text-sm xl:w-44 2xl:w-52 2xl:left-20 left-10 text-slate-400 lg:text-lg"
+    >
       <p class="py-2 border-b text-sky-400 border-sky-400">目录</p>
       <ul>
         <li
@@ -17,7 +19,7 @@
     </div>
     <!-- 方向介绍正文 -->
     <div
-      class="leading-relaxed w-4/5 p-4 mt-8 transition-all duration-300 bg-white hover:scale-[0.98] lg:ml-52 myShadow ml-36"
+      class="leading-loose xl:w-[65%] w-3/5 p-4 px-6 mt-8 transition-all duration-300 bg-white hover:scale-[0.98] xl:mr-52 myShadow mx-auto"
       v-for="(item, index) in projectInfo"
       :key="index"
       :id="`${item.name}`"
