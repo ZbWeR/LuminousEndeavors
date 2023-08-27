@@ -228,7 +228,7 @@
       @toggleShow="toggleShow"
       @alert="messageAlert"
       @updateToken="updateToken"
-      v-show="resetShow"
+      v-if="resetShow"
       :token="token"
     ></ResetPassword>
     <CopyRights></CopyRights>
