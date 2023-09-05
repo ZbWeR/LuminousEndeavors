@@ -24,3 +24,13 @@
     </div>
   </div>
 </template>
+<style lang="less" scoped>
+@media (max-width: 980px) {
+    h1{
+      font-size: 1rem;
+    }
+    button{
+      padding:0 0;
+    }
+}
+</style>

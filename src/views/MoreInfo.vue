@@ -19,12 +19,12 @@ border-image-slice: 20;"
     <HeadTopNav class="title">更 多 信 息</HeadTopNav>
     <div class="flex w-4/5 p-4 mt-8 bg-white shadow-md h-auto lg:mx-auto relative">
       <!-- QQ群 -->
-      <div class="mr-6 ml-3 text-center" style="width: 300px;position: fixed;left: 180px;">
+      <div class="mr-6 ml-3 text-center mobile-hide" style="width: 200px;position: fixed;left: 15%;">
         <h1 class="font-bold leading-8">详情可入群821363686了解</h1>
       <img src="../assets/QQ.png" alt=""  >
       </div>
       <!-- 分隔 -->
-      <div class="h-auto w-1 bg-[#f4f4f5] rounded-lg" style="margin-left: 30%;"></div>
+      <div class="h-auto w-1 bg-[#f4f4f5] rounded-lg mobile-hide" style="margin-left: 30%;"></div>
       <!-- 正文 -->
       <div class="main-text">
         <p><span class="font-w">大型活动名称：</span>光点计划-开源主题项目实践活动</p>
@@ -146,7 +146,7 @@ border-image-slice: 20;"
                 </li>
               </ul>
         </ul>
-<!-- 同学部分 -->
+  <!-- 同学部分 -->
         <p class="font-w">同学参与流程</p>
         <p>宣讲阶段：</p>
         <ul>
@@ -356,7 +356,7 @@ const baomingbiao=[
   "活动策划组会将报名表转发给对应负责人，并公布报名名单以供确认"
 ]
 </script>
-<style>
+<style scoped>
 .main-text{
   font-size: 16px;
   width: 1200px;
@@ -385,5 +385,10 @@ background-size: 50px 50px;
 background-blend-mode: multiply;
 -webkit-background-clip: text;
 background-clip: text;
+}
+@media (max-width: 980px) {
+  .main-text{
+    padding: 0.5rem;
+  }
 }
 </style>
