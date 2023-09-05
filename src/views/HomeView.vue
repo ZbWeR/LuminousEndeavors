@@ -316,6 +316,7 @@ function controlHeadNav(e) {
   transform: translate3d(0, 0, 0);
   scale: 1.01;
 }
+
 @media (max-width: 980px) {
   #info{
     display: block;

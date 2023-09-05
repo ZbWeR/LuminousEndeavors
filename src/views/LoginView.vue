@@ -15,7 +15,7 @@
           class="flex flex-col items-center justify-center w-full h-full"
         >
           <h1
-            class="mb-16 font-sans text-4xl font-bold tracking-widest text-center"
+            class="mb-16 font-sans text-4xl font-bold tracking-widest text-center "
           >
             登 录
           </h1>
@@ -52,7 +52,7 @@
                 loginInfo.password.length < 6
               "
               @click.prevent="handleLogin"
-              class="disabled:bg-sky-200 disabled:cursor-not-allowed shadow-md box-border w-1/2 px-1 py-3 mt-12 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400 disabled:hover:scale-100"
+              class= "disabled:bg-sky-200 disabled:cursor-not-allowed shadow-md box-border w-1/2 px-1 py-3 mt-12 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400 disabled:hover:scale-100"
             >
               登录
             </button>
@@ -157,7 +157,7 @@
           class="flex flex-col items-center justify-center w-full h-full transition-all"
         >
           <h1
-            class="mb-16 font-sans text-4xl font-bold tracking-widest text-center"
+            class=" mb-16 font-sans text-4xl font-bold tracking-widest text-center "
           >
             注 册
           </h1>
@@ -268,7 +268,7 @@
           <button
             @click.prevent="handleRegister"
             :disabled="registerRunning || phoneCodeInfo.verifyCode === ''"
-            class="disabled:cursor-not-allowed disabled:bg-sky-200 shadow-md box-border w-1/4 px-1 py-3 mt-6 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
+            class="w-1/2 center disabled:cursor-not-allowed disabled:bg-sky-200 shadow-md box-border  px-1 py-3 mt-6 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
           >
             注册
           </button>
@@ -682,9 +682,11 @@ input[type="number"] {
   appearance: none;
   -moz-appearance: textfield;
 }
+/* 移动端适配 */
 .wid{
   width: 50%;
 }
+/* 标题变色 */
 @media (max-width: 980px) {
   .mobile-view{
     height: 70vh;

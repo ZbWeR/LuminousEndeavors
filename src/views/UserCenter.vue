@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col w-screen min-h-screen bg-zinc-100 overflow-hidden">
     <!-- 标题栏 -->
-    <HeadTopNav>个 人 中 心</HeadTopNav>
+    <HeadTopNav class="title">个 人 中 心</HeadTopNav>
 
     <div class="flex flex-col items-center flex-1 w-full mt-4 lg:mx-auto overflow-hidden">
       <!-- 用户信息 -->
@@ -373,6 +373,23 @@ function toggleShow(e, phone = -1) {
 .wid{
   width: 50%;
 }
+.title{
+  color: transparent;
+ background:
+            repeating-linear-gradient(-45deg,
+            transparent,
+            transparent 25%,
+            tomato 0,
+            tomato 50%),
+            repeating-linear-gradient(45deg,
+            transparent,
+            transparent 25%,
+            dodgerblue 0,
+            dodgerblue 50%), wheat;
+background-size: 50px 50px;
+background-blend-mode: multiply;
+-webkit-background-clip: text;
+background-clip: text;}
 @media (max-width: 980px) {
   .wid{
     width: 80%;

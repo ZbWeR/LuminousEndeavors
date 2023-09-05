@@ -1,7 +1,7 @@
 <template>
   <div class="w-full bg-zinc-100 overflow-hidden">
     <!-- 标题栏 -->
-    <HeadTopNav id="top">方 向 介 绍</HeadTopNav>
+    <HeadTopNav id="top" class="title">方 向 介 绍</HeadTopNav>
     <!-- 导航栏 -->
     <div
       class=" nav fixed  text-sm xl:w-44 2xl:w-52 2xl:left-20 left-10 text-slate-400 lg:text-lg "
@@ -492,6 +492,23 @@ const projectInfo = [
 .main:hover{
   scale: 1.02;
 }
+.title{
+  color: transparent;
+ background:
+            repeating-linear-gradient(-45deg,
+            transparent,
+            transparent 25%,
+            tomato 0,
+            tomato 50%),
+            repeating-linear-gradient(45deg,
+            transparent,
+            transparent 25%,
+            dodgerblue 0,
+            dodgerblue 50%), wheat;
+background-size: 50px 50px;
+background-blend-mode: multiply;
+-webkit-background-clip: text;
+background-clip: text;}
 @media (max-width: 980px) {
     .nav{
       left: 2%;
