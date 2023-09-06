@@ -48,6 +48,7 @@
         v-if="!showSignForm && userState.signInfo"
         class="wid p-4 mt-4 bg-white rounded-md shadow-md"
       >
+        <!-- 报名信息 -->
         <h1 class="text-2xl font-bold tracking-widest text-sky-400">
           报名信息
         </h1>
@@ -82,19 +83,27 @@
             {{ userState.signInfo?.info }}
           </p>
         </div>
-        <div class="flex justify-center gap-4 pt-4 mt-2 border-t">
-          <button
-            @click="showSignForm = true"
-            class="hidden px-3 py-2 text-white transition-all bg-orange-400 rounded-md hover:scale-95 hover:bg-orange-500"
-          >
-            修改信息
-          </button>
-          <button
-            @click="showUploadFile = true"
-            class="block px-3 py-2 text-white transition-all rounded-md bg-sky-400 hover:scale-95 hover:bg-sky-500"
-          >
-            提交文件
-          </button>
+        <!-- 文件相关 -->
+        <div class="pt-4 mt-2 border-t">
+          <p v-show="userState.fileInfo?.prUrl">
+            <span class="text-slate-400">项目 PR 链接: </span
+            >{{ userState.fileInfo?.prUrl }}
+          </p>
+          <div class="flex justify-center gap-4 mt-4">
+            <button
+              v-show="userState.fileInfo?.zipUrl"
+              @click="downloadFile"
+              class="px-3 py-2 text-white transition-all bg-orange-400 rounded-md hover:scale-95 hover:bg-orange-500"
+            >
+              查看文件
+            </button>
+            <button
+              @click="showUploadFile = true"
+              class="block px-3 py-2 text-white transition-all rounded-md bg-sky-400 hover:scale-95 hover:bg-sky-500"
+            >
+              提交文件
+            </button>
+          </div>
         </div>
       </div>
       <!-- 未报名 -->
@@ -211,6 +220,7 @@
       v-show="showUploadFile"
       @alert="messageAlert"
       @changeVis="showUploadFile = false"
+      @refreshInfo="getAllInfo"
     ></UploadFile>
     <ResetPassword
       fun-type="phone"
@@ -218,7 +228,7 @@
       @toggleShow="toggleShow"
       @alert="messageAlert"
       @updateToken="updateToken"
-      v-show="resetShow"
+      v-if="resetShow"
       :token="token"
     ></ResetPassword>
     <CopyRights></CopyRights>
@@ -237,6 +247,7 @@ import {
   getSignInfo,
   postSignInfo,
   updateSignInfo,
+  getFileInfo,
 } from "@/request/api/info";
 import { MessageCreator } from "@/components/message";
 import { removeToken } from "@/store/token";
@@ -250,11 +261,16 @@ const userState = reactive({
     gender: "无",
   },
   signInfo: null,
+  fileInfo: null,
 });
 
 const { token } = useMapState(["token"]);
 const { updateToken } = useMapMutations(["updateToken"]);
 onMounted(async () => {
+  await getAllInfo();
+});
+
+async function getAllInfo() {
   try {
     // 页面鉴权
     let { data } = await getUserInfo(token.value);
@@ -262,18 +278,13 @@ onMounted(async () => {
     // 获取报名信息
     let res = await getSignInfo(token.value);
     userState.signInfo = res.data.data;
-    // 同步报名信息
-    // signInputInfo.name = userState.signInfo.name;
-    // signInputInfo.stuNumber = userState.signInfo.stuNumber;
-    // signInputInfo.qqNumber = userState.signInfo.qqNumber;
-    // signInputInfo.major = userState.signInfo.major;
-    // signInputInfo.choice = userState.signInfo.choice;
-    // signInputInfo.info = userState.signInfo.info;
+    // 获取文件上传信息
+    res = await getFileInfo(token.value);
+    userState.fileInfo = res.data.data?.[0] ?? null;
   } catch {
-    // console.log(2333);
     return;
   }
-});
+}
 
 const messageInstance = new MessageCreator();
 /**
@@ -364,15 +375,15 @@ const showUploadFile = ref(false); // 控制上传文件显示
 // 控制重置密码/绑定手机显示
 const resetShow = ref(false);
 function toggleShow(e, phone = -1) {
-  console.log(phone);
   if (phone !== -1) userState.baseInfo.phoneNumber = phone;
   resetShow.value = !resetShow.value;
 }
-</script>
-<style lang="less" scoped>
-.wid{
-  width: 50%;
+// 下载文件
+function downloadFile() {
+  window.open(userState.fileInfo?.zipUrl, "_blank");
 }
+</script>
+<style scoped>
 .title{
   color: transparent;
  background:
@@ -390,15 +401,13 @@ background-size: 50px 50px;
 background-blend-mode: multiply;
 -webkit-background-clip: text;
 background-clip: text;}
+.wid{
+  width: 50%;
+}
 @media (max-width: 980px) {
   .wid{
     width: 80%;
   }
 }
-.info{
-  display: block;
-  p{
-    width: 100%;
-  }
-}
+
 </style>
