@@ -383,3 +383,31 @@ function downloadFile() {
   window.open(userState.fileInfo?.zipUrl, "_blank");
 }
 </script>
+<style scoped>
+.title{
+  color: transparent;
+ background:
+            repeating-linear-gradient(-45deg,
+            transparent,
+            transparent 25%,
+            tomato 0,
+            tomato 50%),
+            repeating-linear-gradient(45deg,
+            transparent,
+            transparent 25%,
+            dodgerblue 0,
+            dodgerblue 50%), wheat;
+background-size: 50px 50px;
+background-blend-mode: multiply;
+-webkit-background-clip: text;
+background-clip: text;}
+.wid{
+  width: 50%;
+}
+@media (max-width: 980px) {
+  .wid{
+    width: 80%;
+  }
+}
+
+</style>
