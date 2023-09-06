@@ -1,8 +1,8 @@
 <template>
   <!-- TODO:登录方式切换显示 -->
-  <div class="flex items-center justify-center w-screen h-screen bg-zinc-100">
+  <div class="flex items-center justify-center w-screen h-screen bg-zinc-100" >
     <div
-      class="relative flex w-3/5 overflow-hidden bg-slate-50 rounded-xl h-2/3 rootShadow"
+      class="relative flex w-3/5 overflow-hidden bg-slate-50 rounded-xl h-2/3 rootShadow mobile-view"
     >
       <!-- 登录 -->
       <div
@@ -15,13 +15,13 @@
           class="flex flex-col items-center justify-center w-full h-full"
         >
           <h1
-            class="mb-16 font-sans text-4xl font-bold tracking-widest text-center"
+            class="mb-16 font-sans text-4xl font-bold tracking-widest text-center "
           >
             登 录
           </h1>
           <!-- 账号密码登录 -->
           <div
-            class="flex flex-col items-center w-1/2"
+            class="flex flex-col items-center wid"
             v-show="loginInfo.loginWay === 'password'"
           >
             <input
@@ -52,7 +52,7 @@
                 loginInfo.password.length < 6
               "
               @click.prevent="handleLogin"
-              class="disabled:bg-sky-200 disabled:cursor-not-allowed shadow-md box-border w-1/2 px-1 py-3 mt-12 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400 disabled:hover:scale-100"
+              class= "disabled:bg-sky-200 disabled:cursor-not-allowed shadow-md box-border w-1/2 px-1 py-3 mt-12 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400 disabled:hover:scale-100"
             >
               登录
             </button>
@@ -67,7 +67,7 @@
             />
           </div>
           <!-- 手机验证码登录 -->
-          <div class="w-1/2" v-show="loginInfo.loginWay === 'phoneNumber'">
+          <div class="wid" v-show="loginInfo.loginWay === 'phoneNumber'">
             <input
               class="block w-full px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow bg-sky-50"
               type="text"
@@ -76,22 +76,22 @@
             />
             <!-- 验证码 -->
             <div
-              class="flex items-center justify-between py-2 pl-4 pr-2 mt-4 overflow-hidden duration-300 rounded-lg outline-none bg-sky-50 inputShadow"
+              class="items-center justify-between py-2 pl-4 pr-2 mt-4 overflow-hidden duration-300 rounded-lg outline-none bg-sky-50 inputShadow"
             >
               <input
-                class="flex-1 tracking-wider outline-none placeholder:text-sm bg-sky-50"
+                class=" tracking-wider outline-none placeholder:text-sm bg-sky-50"
                 type="text"
                 v-model="phoneCodeInfo.verifyCode"
                 placeholder="请输入验证码..."
               />
-              <button
+            </div>
+            <button
                 @click.prevent="getVerifyCode(loginInfo.userName)"
                 :disabled="!loginInfo.userName || verifyCodeBtn.disabled"
-                class="text-sm shrink-0 disabled:cursor-not-allowed disabled:text-slate-400"
+                class=" text-sm shrink-0 disabled:cursor-not-allowed disabled:text-slate-400"
               >
                 {{ verifyCodeBtn.content }}
               </button>
-            </div>
             <button
               :disabled="
                 LoginRunning ||
@@ -157,7 +157,7 @@
           class="flex flex-col items-center justify-center w-full h-full transition-all"
         >
           <h1
-            class="mb-16 font-sans text-4xl font-bold tracking-widest text-center"
+            class=" mb-16 font-sans text-4xl font-bold tracking-widest text-center "
           >
             注 册
           </h1>
@@ -165,7 +165,7 @@
           <input
             v-model="registerInfo.nickName"
             @change="nickNameTest"
-            class="block w-1/2 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow"
+            class="block wid px-4 py-2 tracking-wider duration-300 rounded-lg outline-none placeholder:text-sm inputShadow"
             :class="
               registerInfo.nickName === '' || errorInput.code === 'nickName'
                 ? 'bg-pink-50'
@@ -180,12 +180,12 @@
             v-model="registerInfo.password"
             @change="passWordTest"
             :class="registerInfo.password ? 'bg-sky-50' : 'bg-pink-50'"
-            class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
+            class="block wid px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
             type="password"
             placeholder="Password"
           />
           <!-- 年龄与性别 -->
-          <div class="flex justify-between w-1/2 gap-4 mt-4">
+          <div class="flex justify-between wid gap-4 mt-4">
             <!-- 年龄 -->
             <input
               class="w-16 px-4 py-2 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
@@ -232,7 +232,7 @@
                 ? 'bg-pink-50'
                 : 'bg-sky-50'
             "
-            class="block w-1/2 px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
+            class="block wid px-4 py-2 mt-4 tracking-wider duration-300 rounded-lg outline-none inputShadow placeholder:text-sm"
             type="text"
             placeholder="PhoneNumber"
             @change="phoneNumberTest(registerInfo.phoneNumber)"
@@ -241,7 +241,7 @@
           <!-- 验证码 -->
           <div
             :class="phoneCodeInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
-            class="flex items-center justify-between w-1/2 py-2 pl-4 pr-2 mt-4 overflow-hidden duration-300 rounded-lg outline-none inputShadow"
+            class="flex items-center justify-between wid py-2 pl-4 pr-2 mt-4 overflow-hidden duration-300 rounded-lg outline-none inputShadow"
           >
             <input
               :class="phoneCodeInfo.verifyCode ? 'bg-sky-50' : 'bg-pink-50'"
@@ -268,7 +268,7 @@
           <button
             @click.prevent="handleRegister"
             :disabled="registerRunning || phoneCodeInfo.verifyCode === ''"
-            class="disabled:cursor-not-allowed disabled:bg-sky-200 shadow-md box-border w-1/4 px-1 py-3 mt-6 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
+            class="w-1/2 center disabled:cursor-not-allowed disabled:bg-sky-200 shadow-md box-border  px-1 py-3 mt-6 tracking-[0.5em] indent-[0.5em] text-white transition-all rounded-full hover:bg-sky-500 hover:scale-95 bg-sky-400"
           >
             注册
           </button>
@@ -681,5 +681,19 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   appearance: none;
   -moz-appearance: textfield;
+}
+/* 移动端适配 */
+.wid{
+  width: 50%;
+}
+/* 标题变色 */
+@media (max-width: 980px) {
+  .mobile-view{
+    height: 70vh;
+    width: 100vw;
+  }
+  .wid{
+    width: 80%;
+  }
 }
 </style>

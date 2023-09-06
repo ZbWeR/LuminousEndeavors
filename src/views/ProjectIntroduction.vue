@@ -1,25 +1,29 @@
 <template>
-  <div class="w-full bg-zinc-100">
+  <div class="w-full bg-zinc-100 overflow-hidden">
     <!-- 标题栏 -->
-    <HeadTopNav>方 向 介 绍</HeadTopNav>
+    <HeadTopNav id="top" class="title">方 向 介 绍</HeadTopNav>
     <!-- 导航栏 -->
     <div
-      class="fixed w-32 text-sm xl:w-44 2xl:w-52 2xl:left-20 left-10 text-slate-400 lg:text-lg"
+      class=" nav fixed  text-sm xl:w-44 2xl:w-52 2xl:left-20 left-10 text-slate-400 lg:text-lg "
+      :class="{list: isshow }" 
     >
-      <p class="py-2 border-b text-sky-400 border-sky-400">目录</p>
-      <ul>
+      <p class="py-2 border-b text-sky-400 border-sky-400 cursor-pointer z-10"  @click="isshow=!isshow">📖 目录</p>
+      <ul v-show=isshow >
         <li
           v-for="(item, index) in projectName"
           :key="index"
           class="overflow-hidden leading-loose hover:text-sky-400 whitespace-nowrap text-ellipsis"
         >
-          <a :href="`#${item}`">{{ item }}</a>
+          <a :href="`#${item}`" @click="changeshow()">{{ item }}</a>
+        </li>
+        <li class="overflow-hidden leading-loose hover:text-sky-400 whitespace-nowrap text-ellipsis">
+          <a href="#top" @click="changeshow()">返回顶部</a>
         </li>
       </ul>
     </div>
     <!-- 方向介绍正文 -->
     <div
-      class="leading-loose xl:w-[65%] w-3/5 p-4 px-6 mt-8 transition-all duration-300 bg-white hover:scale-[0.98] xl:mr-52 myShadow mx-auto"
+      class="main leading-loose xl:w-[65%] w-3/5 p-4 px-6 mt-8 transition-all duration-300 bg-white  xl:mr-52 myShadow mx-auto" 
       v-for="(item, index) in projectInfo"
       :key="index"
       :id="`${item.name}`"
@@ -32,7 +36,7 @@
       <div class="p-2 mt-2 border-t border-b">
         <!-- 头衔与联系方式 -->
         <div class="flex justify-between">
-          <p class="font-bold tracking-widest">{{ item?.leader?.name }}</p>
+          <p class="font-bold tracking-widest leader-name">{{ item?.leader?.name }}</p>
           <p class="flex items-center gap-4">
             <span class="px-2 text-sm bg-teal-200 rounded-full">{{
               item?.leader?.title
@@ -41,7 +45,7 @@
               item?.leader?.grade
             }}</span>
           </p>
-          <p>
+          <p v-show="wid>980">
             QQ:
             <span class="border-b text-sky-400 border-sky-400">{{
               item?.leader?.contact
@@ -124,7 +128,31 @@
   </div>
 </template>
 
+<script>
+export default {
+    data() {
+        return {
+            isshow:true,
+            wid:document.documentElement.clientWidth
+        }
+    },
+    created(){
+      if(this.wid<980){
+        this.isshow=false
+      }
+    },
+    methods:{
+      changeshow(){
+        if(this.wid<980){
+          this.isshow=!this.isshow
+        }
+      }
+    },
+}
+
+</script>
 <script setup>
+
 import HeadTopNav from "@/components/HeadTopNav.vue";
 import CopyRights from "@/components/CopyRights.vue";
 
@@ -460,5 +488,49 @@ const projectInfo = [
 .myShadow {
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3),
     -4px -4px 4px rgba(255, 255, 255, 0.7);
+}
+.main:hover{
+  scale: 1.02;
+}
+.title{
+  color: transparent;
+ background:
+            repeating-linear-gradient(-45deg,
+            transparent,
+            transparent 25%,
+            tomato 0,
+            tomato 50%),
+            repeating-linear-gradient(45deg,
+            transparent,
+            transparent 25%,
+            dodgerblue 0,
+            dodgerblue 50%), wheat;
+background-size: 50px 50px;
+background-blend-mode: multiply;
+-webkit-background-clip: text;
+background-clip: text;}
+@media (max-width: 980px) {
+    .nav{
+      left: 2%;
+      transition: all 0.2s ease
+    }
+    .list{
+      border-radius: 10px;
+      padding: 5px;
+      background-color: #fff;
+      width: 80%;
+      z-index: 999;
+      left: 10%;
+    }
+    .leader-name{
+      width: 24px;
+      padding-right: 2rem;
+    }
+    .main{
+      width: 80%;
+      :hover{
+        scale: 1;
+      }
+    }
 }
 </style>

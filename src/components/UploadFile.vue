@@ -4,7 +4,7 @@
     class="absolute z-40 flex items-center justify-center w-screen h-screen overflow-hidden bg-black/50"
   >
     <form
-      class="w-1/3 p-3 bg-white rounded-md"
+      class="wid p-3 bg-white rounded-md"
       id="uploadForm"
       method="post"
       ref="uploadForm"
@@ -144,3 +144,14 @@ async function runUpload() {
   }
 }
 </script>
+<style scoped>
+.wid{
+  width: 33.3%;
+}
+@media (max-width: 980px) {
+  .wid{
+    width: 80%;
+  }
+}
+
+</style>
