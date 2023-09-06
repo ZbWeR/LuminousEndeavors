@@ -1,8 +1,8 @@
 <template>
   <!-- TODO:整体样式修改,白底 -->
   <!-- TODO:考虑增加一个过渡动画 -->
-  <div>
-    <div v-show="isScrollDown"><HomeNav></HomeNav></div>
+  <div v-show="isScrollDown"><HomeNav></HomeNav></div>
+
   <div
     class="w-full h-screen overflow-x-hidden overflow-y-auto select-none"
     ref="fullPage"
@@ -75,12 +75,11 @@
     <div class="relative w-full pt-20 main-bg" ref="mainContent">
       <div class="w-4/5 mx-auto">
         <!-- 活动介绍&参与获得 -->
-        <section class="relative flex justify-between" id="info">
+        <section class="relative flex justify-between">
           <!-- 活动内容 -->
           <div
             style="background-color: #fff"
             class="w-3/5 overflow-hidden rounded-lg shadow"
-            id="content"
           >
             <!-- 你将参与 -->
             <div class="p-3">
@@ -128,15 +127,14 @@
             </div>
           </div>
           <!-- 活动介绍 & logo-->
-          <div class="flex flex-col items-center justify-between w-1/3 " id="introduce">
-            <h1 class="font-sans text-2xl xl:text-3xl 2xl:text-4xl mobile-hide">
+          <div class="flex flex-col items-center justify-between w-1/3">
+            <h1 class="font-sans text-2xl xl:text-3xl 2xl:text-4xl">
               /* 开源项目主题活动 */
             </h1>
 
             <!-- 活动介绍 -->
             <div
               class="transition-all duration-500 overflow-hidden cursor-pointer h-fit w-full max-h-96 p-3 text-white rounded-lg bg-gradient-to-br to-[#5dd589] from-[#87cefa] shadow"
-             
             >
               <h1 class="h-8 text-2xl">🎨 活动介绍</h1>
               <p class="mt-1 overflow-hidden text-base tracking-wider indent-4">
@@ -204,7 +202,6 @@
         <CopyRights></CopyRights>
       </div>
     </div>
-  </div>
   </div>
 </template>
 
@@ -315,21 +312,5 @@ function controlHeadNav(e) {
 .shadow:hover {
   transform: translate3d(0, 0, 0);
   scale: 1.01;
-}
-
-@media (max-width: 980px) {
-  #info{
-    display: block;
-     #content{
-      width: 100%;
-     }
-     .mobile-hide{
-      display: none;
-     }
-  }
-  #introduce{
-    margin-top: 2em;
-      width: 100%;
-     }
 }
 </style>

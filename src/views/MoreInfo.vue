@@ -455,9 +455,4 @@ const baomingbiao = [
   -webkit-background-clip: text;
   background-clip: text;
 }
-@media (max-width: 980px) {
-  .main-text{
-    padding: 0.5rem;
-  }
-}
 </style>

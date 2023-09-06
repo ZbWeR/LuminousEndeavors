@@ -5,7 +5,7 @@
   >
     <!-- 标题 -->
     <h1
-      class="flex items-center w-full text-2xl font-bold tracking-widest lg:text-3xl mobile-hide"
+      class="flex items-center w-full text-2xl font-bold tracking-widest lg:text-3xl"
     >
       关于光点计划
       <span class="inline-block w-24 h-1 mx-5 bg-black"></span> <slot></slot>
@@ -14,7 +14,7 @@
     <div class="flex shrink-0">
       <!-- 主页按钮 -->
       <div
-        class="flex items-center gap-2 pr-2 transition-all group shrink-0 text-zinc-400 lg:hover:-translate-y-1 lg:hover:scale-105"
+        class="flex items-center gap-2 px-2 transition-all group shrink-0 text-zinc-400 lg:hover:-translate-y-1 lg:hover:scale-105"
       >
         <svg
           class="icon fill-zinc-400 group-hover:fill-sky-400"
@@ -96,11 +96,3 @@ const route = useRoute();
 const router = useRouter();
 const routeName = route.name;
 </script>
-
-<style lang="less">
-@media (max-width: 980px) {
-    .mobile-hide{
-     display: none;
-    }
-}
-</style>

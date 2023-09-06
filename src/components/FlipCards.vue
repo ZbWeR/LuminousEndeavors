@@ -8,7 +8,7 @@
         class="border-2 border-[#0ea5e9] absolute flex items-center justify-center w-full h-full bg-transparent rounded-md backface-hidden"
       >
         <!-- 标题 -->
-        <p class="text-base" id="title">{{ cardContent.project }}</p>
+        <p class="text-xl">{{ cardContent.project }}</p>
       </div>
       <div
         style="background-color: rgba(123, 214, 207, 0.9)"
@@ -46,11 +46,5 @@ const { cardContent } = defineProps(["cardContent"]);
 }
 .rotateY-180 {
   transform: rotateY(180deg);
-}
-@media (max-width: 980px) {
-    #title{
-      font-size: 1rem;
-      line-height: 1.25rem;
-    }
 }
 </style>

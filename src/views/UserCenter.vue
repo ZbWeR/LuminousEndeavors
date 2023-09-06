@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col w-screen min-h-screen bg-zinc-100 overflow-hidden">
+  <div class="flex flex-col w-screen min-h-screen bg-zinc-100">
     <!-- 标题栏 -->
-    <HeadTopNav class="title">个 人 中 心</HeadTopNav>
+    <HeadTopNav>个 人 中 心</HeadTopNav>
 
-    <div class="flex flex-col items-center flex-1 w-full mt-4 lg:mx-auto overflow-hidden">
+    <div class="flex flex-col items-center flex-1 w-4/5 mt-4 lg:mx-auto">
       <!-- 用户信息 -->
       <div
-        class="bg-gradient-to-r to-[#37ecba] from-[#72afd3] relative flex items-center justify-between wid gap-4 p-2 transition-all duration-500 rounded-md hover:scale-[0.98] shadow-md"
+        class="bg-gradient-to-r to-[#37ecba] from-[#72afd3] relative flex items-center justify-between w-1/2 gap-4 p-2 transition-all duration-500 rounded-md hover:scale-[0.98] shadow-md"
       >
         <!-- TODO:头像加载失败处理 -->
         <img
@@ -38,7 +38,7 @@
               removeToken();
             }
           "
-          class="absolute flex items-center justify-center w-8 h-8 font-bold text-red-500 bg-white rounded-full top-1 right-1"
+          class="absolute flex items-center justify-center w-8 h-8 font-bold text-red-500 bg-white rounded-full top-4 right-4"
         >
           X
         </button>
@@ -46,13 +46,13 @@
       <!-- 报名信息(已报名) -->
       <div
         v-if="!showSignForm && userState.signInfo"
-        class="wid p-4 mt-4 bg-white rounded-md shadow-md"
+        class="w-1/2 p-4 mt-4 bg-white rounded-md shadow-md"
       >
         <!-- 报名信息 -->
         <h1 class="text-2xl font-bold tracking-widest text-sky-400">
           报名信息
         </h1>
-        <div class="flex w-full mt-2 info" >
+        <div class="flex w-full mt-2">
           <p class="w-1/3">
             <span class="text-slate-400">姓名:</span>
             {{ userState.signInfo?.name }}
@@ -109,9 +109,9 @@
       <!-- 未报名 -->
       <div
         v-else-if="!showSignForm && !userState.signInfo"
-        class="flex flex-col items-center justify-center wid py-4 mt-4 bg-white rounded-md shadow-md"
+        class="flex flex-col items-center justify-center w-1/2 py-4 mt-4 bg-white rounded-md shadow-md"
       >
-        <img class="wid" src="@/assets/暂无信息.png" alt="缺省图" />
+        <img class="w-1/2" src="@/assets/暂无信息.png" alt="缺省图" />
         <p class="text-slate-400">暂无报名信息~</p>
         <button
           @click="showSignForm = true"
@@ -123,7 +123,7 @@
       <!-- 报名表单 -->
       <div
         v-else
-        class="flex flex-col wid px-3 py-4 mt-4 bg-white rounded-md shadow-md"
+        class="flex flex-col w-1/2 px-3 py-4 mt-4 bg-white rounded-md shadow-md"
       >
         <form>
           <h1 class="text-2xl font-bold tracking-widest text-sky-400">
