@@ -297,7 +297,7 @@ const projectInfo = [
       title: "微光工作室副主席",
       grade: "2021级系统与技术方向",
       experience:
-        "主要研究方向是计算机体系结构，操作系统。代表项目有GlimmerOS操作系统、NPC单周期处理器，GlimmerMeeting智能会议室管理系统。曾获第14届蓝桥杯软件人才大赛C++程序设计组省级二等奖。",
+        "代表项目有GlimmerOS操作系统、NPC支持RISCV64IM五级流水线处理器，GlimmerMeeting智能会议室管理系统。曾获第14届蓝桥杯软件人才大赛C++程序设计组省级二等奖。",
       contact: "2398696309",
     },
     directionIntroduction: [

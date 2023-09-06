@@ -65,7 +65,7 @@
 
 <script setup>
 // TODO:根据传入props的值确认类型,不传入props但是解析了props会发生什么？
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { SendVerifyCode, verifyPhoneNumber } from "@/request/api/auth";
 import { resetUserInfo } from "@/request/api/info";
 
@@ -74,8 +74,9 @@ const { funType, hasPhone, token } = defineProps([
   "hasPhone",
   "token",
 ]);
-const showPhone = funType === "phone" && !hasPhone; // 绑定手机功能
-console.log(funType, hasPhone, showPhone);
+const showPhone = computed(() => {
+  return funType === "phone" && !hasPhone;
+}); // 绑定手机功能
 
 // 输入信息
 const inputData = reactive({
@@ -119,7 +120,7 @@ async function sendCode() {
 async function handleSet() {
   try {
     // 重置信息校验
-    if (!showPhone) {
+    if (!showPhone.value) {
       // 检验非空
       let allValuesNotEmpty = Object.values(inputData).every(
         (item) => item !== ""
@@ -150,7 +151,7 @@ async function handleSet() {
     );
     let codeToken = data?.data;
     // 绑定手机号
-    if (showPhone) {
+    if (showPhone.value) {
       await resetUserInfo(token, inputData.phoneNumber);
       emit("alert", "绑定成功！", "success");
       emit("toggleShow", inputData.phoneNumber);
