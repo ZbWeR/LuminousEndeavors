@@ -102,7 +102,11 @@
       </div>
       <!-- 注意事项 -->
       <div v-if="item?.notice" class="p-2 mt-4 bg-teal-100 border-2 border-teal-500 rounded">
-        <p><span class="font-bold">🔔 注意事项: </span>{{ item?.notice }}</p>
+        <p v-if="(typeof item?.notice) === 'string'"><span class="font-bold">🔔 注意事项: </span>{{ item?.notice }}</p>
+        <div v-else>
+          <h1 class="font-bold">🔔 注意事项</h1>
+          <p v-for="(noticeContent, index) in item?.notice" :key="index">{{ noticeContent }}</p>
+        </div>
       </div>
     </div>
     <CopyRights></CopyRights>
@@ -365,7 +369,7 @@ const projectInfo = [
           title: "数据集: CIFAR-10",
           content: ["CIFAR-10 是一个更接近普适物体的彩色图像数据集，由 Hinton 的学生 Alex Krizhevsky 和 Ilya Sutskever 整理，一共包含 10 个类别的 RGB 彩色图片：飞机（ airplane ）、汽车（ automobile ）、鸟类（ bird ）、猫（ cat ）、鹿（ deer ）、狗（ dog ）、蛙类（ frog ）、马（ horse ）、船（ ship ）和卡车（ truck ）。每个图片的尺寸为 32 × 32 ，每个类别有 6000 个图像，数据集中一共有 50000 张训练图片和 10000 张测试图片。",
             "在本次项目中，我们对 CIFAR-10 数据集进行了简化和修改，详情见以下数据集的 readme 文件",
-            "数据集和示例代码下载地址：https://share.weiyun.com/Qhwhdoqs"],
+            "数据集和示例代码下载地址见注意事项"],
         },
         {
           title: "做题流程:",
@@ -385,7 +389,8 @@ const projectInfo = [
       ],
       overview: "",
     },
-    notice: "测评平台 URL （尚未开放）",
+    notice: ["测评平台 URL：（尚未开放）",
+      "数据集和示例代码下载地址：https://share.weiyun.com/Qhwhdoqs"],
     FAQ: [
       {
         question: "学习本方向项目能让我获得什么？",
