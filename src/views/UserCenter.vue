@@ -1,27 +1,20 @@
 <template>
-  <div class="flex flex-col w-screen min-h-screen bg-zinc-100 overflow-hidden">
+  <div class="flex flex-col w-screen min-h-screen overflow-hidden bg-zinc-100">
     <!-- 标题栏 -->
     <HeadTopNav class="title">个 人 中 心</HeadTopNav>
 
-    <div class="flex flex-col items-center flex-1 w-full mt-4 lg:mx-auto overflow-hidden">
+    <div class="flex flex-col items-center flex-1 w-full mt-4 overflow-hidden lg:mx-auto">
       <!-- 用户信息 -->
       <div
-        class="bg-gradient-to-r to-[#37ecba] from-[#72afd3] relative flex items-center justify-between wid gap-4 p-2 transition-all duration-500 rounded-md hover:scale-[0.98] shadow-md"
-      >
+        class="bg-gradient-to-r to-[#37ecba] from-[#72afd3] relative flex items-center justify-between wid gap-4 p-2 transition-all duration-500 rounded-md hover:scale-[0.98] shadow-md">
         <!-- TODO:头像加载失败处理 -->
-        <img
-          :src="userState.baseInfo?.avatarUrl || '/defaultAvatar.png'"
-          alt=""
-          class="rounded-full shadow-md w-28 shadow-black/25 aspect-square"
-        />
+        <img :src="userState.baseInfo?.avatarUrl || '/defaultAvatar.png'" alt=""
+          class="rounded-full shadow-md w-28 shadow-black/25 aspect-square" />
         <div class="flex-1 text-white">
           <p class="px-2 py-1 font-mono text-2xl font-bold tracking-wider">
             {{ userState.baseInfo?.nickName }}
           </p>
-          <div
-            class="flex items-center mt-2 cursor-pointer"
-            @click="toggleShow"
-          >
+          <div class="flex items-center mt-2 cursor-pointer" @click="toggleShow">
             <p class="px-2 py-1">
               {{ userState.baseInfo?.phoneNumber || "绑定手机号" }}
             </p>
@@ -31,28 +24,23 @@
           </div>
         </div>
         <!-- 退出登录 -->
-        <button
-          @click="
-            {
-              $router.replace({ name: 'auth' });
-              removeToken();
-            }
+        <button @click="
+                    {
+          $router.replace({ name: 'auth' });
+          removeToken();
+        }
           "
-          class="absolute flex items-center justify-center w-8 h-8 font-bold text-red-500 bg-white rounded-full top-1 right-1"
-        >
+          class="absolute flex items-center justify-center w-8 h-8 font-bold text-red-500 bg-white rounded-full top-1 right-1">
           X
         </button>
       </div>
       <!-- 报名信息(已报名) -->
-      <div
-        v-if="!showSignForm && userState.signInfo"
-        class="wid p-4 mt-4 bg-white rounded-md shadow-md"
-      >
+      <div v-if="!showSignForm && userState.signInfo" class="p-4 mt-4 bg-white rounded-md shadow-md wid">
         <!-- 报名信息 -->
         <h1 class="text-2xl font-bold tracking-widest text-sky-400">
           报名信息
         </h1>
-        <div class="flex w-full mt-2 info" >
+        <div class="flex w-full mt-2 info">
           <p class="w-1/3">
             <span class="text-slate-400">姓名:</span>
             {{ userState.signInfo?.name }}
@@ -86,45 +74,32 @@
         <!-- 文件相关 -->
         <div class="pt-4 mt-2 border-t">
           <p v-show="userState.fileInfo?.prUrl">
-            <span class="text-slate-400">项目 PR 链接: </span
-            >{{ userState.fileInfo?.prUrl }}
+            <span class="text-slate-400">项目 PR 链接: </span>{{ userState.fileInfo?.prUrl }}
           </p>
           <div class="flex justify-center gap-4 mt-4">
-            <button
-              v-show="userState.fileInfo?.zipUrl"
-              @click="downloadFile"
-              class="px-3 py-2 text-white transition-all bg-orange-400 rounded-md hover:scale-95 hover:bg-orange-500"
-            >
+            <button v-show="userState.fileInfo?.zipUrl" @click="downloadFile"
+              class="px-3 py-2 text-white transition-all bg-orange-400 rounded-md hover:scale-95 hover:bg-orange-500">
               查看文件
             </button>
-            <button
-              @click="showUploadFile = true"
-              class="block px-3 py-2 text-white transition-all rounded-md bg-sky-400 hover:scale-95 hover:bg-sky-500"
-            >
+            <button @click="showUploadFile = true"
+              class="block px-3 py-2 text-white transition-all rounded-md bg-sky-400 hover:scale-95 hover:bg-sky-500">
               提交文件
             </button>
           </div>
         </div>
       </div>
       <!-- 未报名 -->
-      <div
-        v-else-if="!showSignForm && !userState.signInfo"
-        class="flex flex-col items-center justify-center wid py-4 mt-4 bg-white rounded-md shadow-md"
-      >
+      <div v-else-if="!showSignForm && !userState.signInfo"
+        class="flex flex-col items-center justify-center py-4 mt-4 bg-white rounded-md shadow-md wid">
         <img class="wid" src="@/assets/暂无信息.png" alt="缺省图" />
         <p class="text-slate-400">暂无报名信息~</p>
-        <button
-          @click="showSignForm = true"
-          class="px-3 py-2 mt-2 text-white transition-all bg-teal-400 rounded-md hover:scale-95 hover:bg-teal-500"
-        >
+        <button @click="showSignForm = true"
+          class="px-3 py-2 mt-2 text-white transition-all bg-teal-400 rounded-md hover:scale-95 hover:bg-teal-500">
           立即报名
         </button>
       </div>
       <!-- 报名表单 -->
-      <div
-        v-else
-        class="flex flex-col wid px-3 py-4 mt-4 bg-white rounded-md shadow-md"
-      >
+      <div v-else class="flex flex-col px-3 py-4 mt-4 bg-white rounded-md shadow-md wid">
         <form>
           <h1 class="text-2xl font-bold tracking-widest text-sky-400">
             报名信息
@@ -133,53 +108,37 @@
           <div class="flex w-full mt-4 -ml-3">
             <div class="flex items-center justify-around w-1/2">
               <label class="text-slate-400 shrink-0">姓名:</label>
-              <input
-                type="text"
-                v-model="signInputInfo.name"
+              <input type="text" v-model="signInputInfo.name"
                 class="text-sm w-2/3 rounded-sm placeholder:text-slate-300 focus:shadow-[0_0_0_1px_#409eff] shadow-[0_0_0_1px_#dcdfe6] py-1 px-2 outline-none transition-all duration-300"
-                placeholder="请输入..."
-              />
+                placeholder="请输入..." />
             </div>
             <div class="flex items-center justify-around w-1/2">
               <label class="text-slate-400 shrink-0">学号:</label>
-              <input
-                type="text"
-                v-model="signInputInfo.stuNumber"
+              <input type="text" v-model="signInputInfo.stuNumber"
                 class="text-sm w-2/3 rounded-sm placeholder:text-slate-300 focus:shadow-[0_0_0_1px_#409eff] shadow-[0_0_0_1px_#dcdfe6] py-1 px-2 outline-none transition-all duration-300"
-                placeholder="请输入..."
-              />
+                placeholder="请输入..." />
             </div>
           </div>
           <!-- 专业qq号 -->
           <div class="flex w-full mt-4 -ml-3">
             <div class="flex items-center justify-around w-1/2">
               <label class="text-slate-400 shrink-0">专业:</label>
-              <input
-                type="text"
-                v-model="signInputInfo.major"
+              <input type="text" v-model="signInputInfo.major"
                 class="text-sm w-2/3 rounded-sm placeholder:text-slate-300 focus:shadow-[0_0_0_1px_#409eff] shadow-[0_0_0_1px_#dcdfe6] py-1 px-2 outline-none transition-all duration-300"
-                placeholder="请输入..."
-              />
+                placeholder="请输入..." />
             </div>
             <div class="flex items-center justify-around w-1/2">
               <label class="text-slate-400 shrink-0">Q Q:</label>
-              <input
-                type="text"
-                v-model="signInputInfo.qqNumber"
+              <input type="text" v-model="signInputInfo.qqNumber"
                 class="text-sm w-2/3 rounded-sm placeholder:text-slate-300 focus:shadow-[0_0_0_1px_#409eff] shadow-[0_0_0_1px_#dcdfe6] py-1 px-2 outline-none transition-all duration-300"
-                placeholder="请输入..."
-              />
+                placeholder="请输入..." />
             </div>
           </div>
           <!-- 方向 -->
           <div class="mt-4">
             <label class="text-slate-400">所选项目:</label>
-            <select
-              class="w-40 ml-4 outline-none rounded-sm shrink-0 shadow-[0_0_0_1px_#dcdfe6] p-1"
-              name=""
-              id=""
-              v-model="signInputInfo.choice"
-            >
+            <select class="w-40 ml-4 outline-none rounded-sm shrink-0 shadow-[0_0_0_1px_#dcdfe6] p-1" name="" id=""
+              v-model="signInputInfo.choice">
               <option disabled value="">请选择</option>
               <option value="处理器设计">处理器设计</option>
               <option value="编译技术">编译技术</option>
@@ -190,25 +149,15 @@
           </div>
           <p class="flex flex-col mt-4">
             <label class="text-slate-400">自我评价:</label>
-            <textarea
-              v-model="signInputInfo.info"
+            <textarea v-model="signInputInfo.info"
               class="duration-300 rounded-sm mt-2 focus:shadow-[0_0_0_1px_#409eff] px-1 shadow-[0_0_0_1px_#dcdfe6] placeholder:text-slate-300 outline-none resize-none focus-within:"
-              cols="30"
-              rows="4"
-              maxlength="200"
-              placeholder="简单介绍一下自己吧!"
-            ></textarea>
+              cols="30" rows="4" maxlength="200" placeholder="简单介绍一下自己吧!"></textarea>
           </p>
           <div class="flex justify-center gap-4 mt-4">
-            <button
-              @click.prevent="showSignForm = false"
-              class="block w-1/5 py-1 tracking-widest text-white transition-all bg-red-400 hover:bg-red-500"
-            >
-              取消</button
-            ><button
-              @click.prevent="handleSign"
-              class="block w-1/5 py-1 tracking-widest text-white transition-all hover:bg-sky-500 bg-sky-400"
-            >
+            <button @click.prevent="showSignForm = false"
+              class="block w-1/5 py-1 tracking-widest text-white transition-all bg-red-400 hover:bg-red-500">
+              取消</button><button @click.prevent="handleSign"
+              class="block w-1/5 py-1 tracking-widest text-white transition-all hover:bg-sky-500 bg-sky-400">
               提 交
             </button>
           </div>
@@ -216,21 +165,10 @@
       </div>
     </div>
     <!-- 提交文件弹窗 -->
-    <UploadFile
-      v-show="showUploadFile"
-      @alert="messageAlert"
-      @changeVis="showUploadFile = false"
-      @refreshInfo="getAllInfo"
-    ></UploadFile>
-    <ResetPassword
-      fun-type="phone"
-      :has-phone="userState.baseInfo?.phoneNumber"
-      @toggleShow="toggleShow"
-      @alert="messageAlert"
-      @updateToken="updateToken"
-      v-if="resetShow"
-      :token="token"
-    ></ResetPassword>
+    <UploadFile v-show="showUploadFile" @alert="messageAlert" @changeVis="showUploadFile = false"
+      @refreshInfo="getAllInfo"></UploadFile>
+    <ResetPassword fun-type="phone" :has-phone="userState.baseInfo?.phoneNumber" @toggleShow="toggleShow"
+      @alert="messageAlert" @updateToken="updateToken" v-if="resetShow" :token="token"></ResetPassword>
     <CopyRights></CopyRights>
   </div>
 </template>
@@ -254,7 +192,7 @@ import { removeToken } from "@/store/token";
 
 const userState = reactive({
   baseInfo: {
-    nickName: "zbwer",
+    nickName: "user",
     phoneNumber: null,
     avatarUrl:
       "http://1.15.179.24:8001/api/file/7521341d-00b4-4431-8460-72c7182f7cf7.jpg",
@@ -384,30 +322,32 @@ function downloadFile() {
 }
 </script>
 <style scoped>
-.title{
+.title {
   color: transparent;
- background:
-            repeating-linear-gradient(-45deg,
-            transparent,
-            transparent 25%,
-            tomato 0,
-            tomato 50%),
-            repeating-linear-gradient(45deg,
-            transparent,
-            transparent 25%,
-            dodgerblue 0,
-            dodgerblue 50%), wheat;
-background-size: 50px 50px;
-background-blend-mode: multiply;
--webkit-background-clip: text;
-background-clip: text;}
-.wid{
+  background:
+    repeating-linear-gradient(-45deg,
+      transparent,
+      transparent 25%,
+      tomato 0,
+      tomato 50%),
+    repeating-linear-gradient(45deg,
+      transparent,
+      transparent 25%,
+      dodgerblue 0,
+      dodgerblue 50%), wheat;
+  background-size: 50px 50px;
+  background-blend-mode: multiply;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.wid {
   width: 50%;
 }
+
 @media (max-width: 980px) {
-  .wid{
+  .wid {
     width: 80%;
   }
 }
-
 </style>
