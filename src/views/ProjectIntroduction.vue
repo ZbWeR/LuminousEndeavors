@@ -102,7 +102,11 @@
       </div>
       <!-- 注意事项 -->
       <div v-if="item?.notice" class="p-2 mt-4 bg-teal-100 border-2 border-teal-500 rounded">
-        <p><span class="font-bold">🔔 注意事项: </span>{{ item?.notice }}</p>
+        <p v-if="(typeof item?.notice) === 'string'"><span class="font-bold">🔔 注意事项: </span>{{ item?.notice }}</p>
+        <div v-else>
+          <h1 class="font-bold">🔔 注意事项</h1>
+          <p v-for="(noticeContent, index) in item?.notice" :key="index">{{ noticeContent }}</p>
+        </div>
       </div>
     </div>
     <CopyRights></CopyRights>
@@ -385,7 +389,8 @@ const projectInfo = [
       ],
       overview: "",
     },
-    notice: "测评平台 URL （尚未开放）",
+    notice: ["测评平台 URL：（尚未开放）",
+      "数据集和示例代码下载地址：https://share.weiyun.com/Qhwhdoqs"],
     FAQ: [
       {
         question: "学习本方向项目能让我获得什么？",
