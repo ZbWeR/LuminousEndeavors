@@ -3,23 +3,38 @@
     <!-- 标题栏 -->
     <HeadTopNav id="top" class="title">方 向 介 绍</HeadTopNav>
     <!-- 导航栏 -->
-    <div class="fixed text-sm nav xl:w-44 2xl:w-52 2xl:left-20 left-10 text-slate-400 lg:text-lg"
-      :class="{ list: isshow }">
-      <p class="z-10 py-2 border-b cursor-pointer text-sky-400 border-sky-400" @click="isshow = !isshow">📖 目录</p>
-      <ul v-show=isshow>
-        <li v-for="(item, index) in projectName" :key="index"
-          class="overflow-hidden leading-loose hover:text-sky-400 whitespace-nowrap text-ellipsis">
+    <div
+      class="fixed text-sm nav xl:w-44 2xl:w-52 2xl:left-20 left-10 text-slate-400 lg:text-lg"
+      :class="{ list: isshow }"
+    >
+      <p
+        class="z-10 py-2 border-b cursor-pointer text-sky-400 border-sky-400"
+        @click="isshow = !isshow"
+      >
+        📖 目录
+      </p>
+      <ul v-show="isshow">
+        <li
+          v-for="(item, index) in projectName"
+          :key="index"
+          class="overflow-hidden leading-loose hover:text-sky-400 whitespace-nowrap text-ellipsis"
+        >
           <a :href="`#${item}`" @click="changeshow()">{{ item }}</a>
         </li>
-        <li class="overflow-hidden leading-loose hover:text-sky-400 whitespace-nowrap text-ellipsis">
+        <li
+          class="overflow-hidden leading-loose hover:text-sky-400 whitespace-nowrap text-ellipsis"
+        >
           <a href="#top" @click="changeshow()">返回顶部</a>
         </li>
       </ul>
     </div>
     <!-- 方向介绍正文 -->
     <div
-      class="main leading-loose xl:w-[65%] w-3/5 p-4 px-6 mt-8 transition-all duration-300 bg-white  xl:mr-52 myShadow mx-auto"
-      v-for="(item, index) in projectInfo" :key="index" :id="`${item.name}`">
+      class="main leading-loose xl:w-[65%] w-3/5 p-4 px-6 mt-8 transition-all duration-300 bg-white xl:mr-52 myShadow mx-auto"
+      v-for="(item, index) in projectInfo"
+      :key="index"
+      :id="`${item.name}`"
+    >
       <!-- 标题 -->
       <h1 class="text-2xl font-bold tracking-wider text-sky-400">
         {{ item.name }}
@@ -28,7 +43,9 @@
       <div class="p-2 mt-2 border-t border-b">
         <!-- 头衔与联系方式 -->
         <div class="flex justify-between">
-          <p class="font-bold tracking-widest leader-name">{{ item?.leader?.name }}</p>
+          <p class="font-bold tracking-widest leader-name">
+            {{ item?.leader?.name }}
+          </p>
           <p class="flex items-center gap-4">
             <span class="px-2 text-sm bg-teal-200 rounded-full">{{
               item?.leader?.title
@@ -52,7 +69,11 @@
       <!-- 方向简介 -->
       <div class="pb-1 mt-2 border-b">
         <h1 class="pb-1 text-xl font-bold text-sky-400">🎨 方向简介</h1>
-        <p class="my-1 indent-4" v-for="(directionItem, index) in item.directionIntroduction" :key="index">
+        <p
+          class="my-1 indent-4"
+          v-for="(directionItem, index) in item.directionIntroduction"
+          :key="index"
+        >
           {{ directionItem }}
         </p>
       </div>
@@ -68,15 +89,23 @@
           {{ item?.projectIntroduction?.foreword }}
         </p>
         <ul>
-          <li v-for="(projectItem, index) in item?.projectIntroduction?.paragraph" :key="index" class="pb-1">
+          <li
+            v-for="(projectItem, index) in item?.projectIntroduction?.paragraph"
+            :key="index"
+            class="pb-1"
+          >
             <!-- 小标题 -->
             <p v-if="projectItem.title">
-              <span class="inline-block w-2 h-2 bg-teal-400 rounded-lg"></span>&nbsp; {{ projectItem.title }}
+              <span class="inline-block w-2 h-2 bg-teal-400 rounded-lg"></span
+              >&nbsp; {{ projectItem.title }}
             </p>
             <!-- 内容 -->
             <div v-if="projectItem.content.length">
-              <p v-for="(content, index) in projectItem.content" :key="index"
-                class="my-1 whitespace-pre-wrap indent-4 text-slate-500">
+              <p
+                v-for="(content, index) in projectItem.content"
+                :key="index"
+                class="my-1 whitespace-pre-wrap indent-4 text-slate-500"
+              >
                 {{ content }}
               </p>
             </div>
@@ -87,7 +116,7 @@
         </p>
         <!-- 代码图片 -->
         <div v-if="item?.name === '计算机视觉与机器学习'">
-          <img src="../assets/code.png" alt="">
+          <img src="../assets/code.png" alt="" />
         </div>
       </div>
       <!-- FAQ -->
@@ -101,11 +130,23 @@
         </div>
       </div>
       <!-- 注意事项 -->
-      <div v-if="item?.notice" class="p-2 mt-4 bg-teal-100 border-2 border-teal-500 rounded">
-        <p v-if="(typeof item?.notice) === 'string'"><span class="font-bold">🔔 注意事项: </span>{{ item?.notice }}</p>
+      <div
+        v-if="item?.notice"
+        class="p-2 mt-4 bg-teal-100 border-2 border-teal-500 rounded"
+      >
+        <p v-if="typeof item?.notice === 'string'">
+          <span class="font-bold">🔔 注意事项: </span>{{ item?.notice }}
+        </p>
         <div v-else>
           <h1 class="font-bold">🔔 注意事项</h1>
-          <p v-for="(noticeContent, index) in item?.notice" :key="index">{{ noticeContent }}</p>
+          <p
+            @click="openOuterLink(noticeContent)"
+            v-for="(noticeContent, index) in item?.notice"
+            :key="index"
+            class="transition-all duration-300 cursor-pointer hover:text-sky-400"
+          >
+            {{ noticeContent }}
+          </p>
         </div>
       </div>
     </div>
@@ -118,28 +159,36 @@ export default {
   data() {
     return {
       isshow: true,
-      wid: document.documentElement.clientWidth
-    }
+      wid: document.documentElement.clientWidth,
+    };
   },
   created() {
     if (this.wid < 980) {
-      this.isshow = false
+      this.isshow = false;
     }
   },
   methods: {
     changeshow() {
       if (this.wid < 980) {
-        this.isshow = !this.isshow
+        this.isshow = !this.isshow;
       }
-    }
+    },
   },
-}
-
+};
 </script>
-<script setup>
 
+<script setup>
 import HeadTopNav from "@/components/HeadTopNav.vue";
 import CopyRights from "@/components/CopyRights.vue";
+
+// 打开外部网页
+function openOuterLink(linkStr) {
+  let urlRegex = /(https?:\/\/[^\s]+)/g;
+  let match = linkStr.match(urlRegex);
+  if (match !== null) {
+    window.open(match[0]);
+  }
+}
 
 const projectName = [
   "分布式系统与云计算",
@@ -367,9 +416,11 @@ const projectInfo = [
       paragraph: [
         {
           title: "数据集: CIFAR-10",
-          content: ["CIFAR-10 是一个更接近普适物体的彩色图像数据集，由 Hinton 的学生 Alex Krizhevsky 和 Ilya Sutskever 整理，一共包含 10 个类别的 RGB 彩色图片：飞机（ airplane ）、汽车（ automobile ）、鸟类（ bird ）、猫（ cat ）、鹿（ deer ）、狗（ dog ）、蛙类（ frog ）、马（ horse ）、船（ ship ）和卡车（ truck ）。每个图片的尺寸为 32 × 32 ，每个类别有 6000 个图像，数据集中一共有 50000 张训练图片和 10000 张测试图片。",
+          content: [
+            "CIFAR-10 是一个更接近普适物体的彩色图像数据集，由 Hinton 的学生 Alex Krizhevsky 和 Ilya Sutskever 整理，一共包含 10 个类别的 RGB 彩色图片：飞机（ airplane ）、汽车（ automobile ）、鸟类（ bird ）、猫（ cat ）、鹿（ deer ）、狗（ dog ）、蛙类（ frog ）、马（ horse ）、船（ ship ）和卡车（ truck ）。每个图片的尺寸为 32 × 32 ，每个类别有 6000 个图像，数据集中一共有 50000 张训练图片和 10000 张测试图片。",
             "在本次项目中，我们对 CIFAR-10 数据集进行了简化和修改，详情见以下数据集的 readme 文件",
-            "数据集和示例代码下载地址见注意事项"],
+            "数据集和示例代码下载地址见注意事项",
+          ],
         },
         {
           title: "做题流程:",
@@ -382,15 +433,18 @@ const projectInfo = [
           content: [
             "1.数据集下载和上传模型全部文件请前往测评平台，平台会展示表现 top5 的名单",
             "2.请在上传文件的文件夹根目录下创建测评脚本 platform_test.py 格式见下图",
-            "3.请将模型全部文件（包括模型文件、模型训练好的参数、测评脚本）放在一个命名为 mymodel 的文件夹中，上传时请将该文件夹压缩为 tar 后直接上传，此时压缩包的名称为 mymodel.tar。",
-            "4.在上传了合法且符合要求的文件后，最终会生成此次提交的评测指标以及排名，排名依据为模型对测试集识别的准确率。",
+            "3.请将模型全部文件（包括模型文件、模型训练好的参数、测评脚本）放在一个命名为 mymodel 的文件夹中，上传时请将该文件夹压缩为 tar 后直接上传，此时压缩包的名称为 mymodel.tar。（即压缩包和根目录文件夹的名称都为 'mymodel'）",
+            "4.服务器没有 GPU 配置，请确保你的模型在测试阶段是可以适用于 CPU 计算的。此外，服务器内部的 Python 解释器版本为 3.10，依赖及其版本为【numpy==1.9.3,tensorflow==2.9.3,torch==2.0.1,torchvision=0.9.1】，请确保你的版本可以被其兼容，任何其它依赖都将报错无法运行！",
+            "5.在上传了合法且符合要求的文件后，最终会生成此次提交的评测指标以及排名，排名依据为模型对测试集识别的准确率。",
           ],
         },
       ],
       overview: "",
     },
-    notice: ["测评平台 URL：（尚未开放）",
-      "数据集和示例代码下载地址：https://share.weiyun.com/Qhwhdoqs"],
+    notice: [
+      "测评平台 URL：https://lab.glimmer.org.cn/mloj/",
+      "数据集和示例代码下载地址：https://share.weiyun.com/82jYbRQx",
+    ],
     FAQ: [
       {
         question: "学习本方向项目能让我获得什么？",
@@ -484,17 +538,21 @@ const projectInfo = [
 
 .title {
   color: transparent;
-  background:
-    repeating-linear-gradient(-45deg,
+  background: repeating-linear-gradient(
+      -45deg,
       transparent,
       transparent 25%,
       tomato 0,
-      tomato 50%),
-    repeating-linear-gradient(45deg,
+      tomato 50%
+    ),
+    repeating-linear-gradient(
+      45deg,
       transparent,
       transparent 25%,
       dodgerblue 0,
-      dodgerblue 50%), wheat;
+      dodgerblue 50%
+    ),
+    wheat;
   background-size: 50px 50px;
   background-blend-mode: multiply;
   -webkit-background-clip: text;
@@ -504,7 +562,7 @@ const projectInfo = [
 @media (max-width: 980px) {
   .nav {
     left: 2%;
-    transition: all 0.2s ease
+    transition: all 0.2s ease;
   }
 
   .list {
